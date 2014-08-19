@@ -7,9 +7,9 @@ package com.raizlabs.android.parser;
 public interface FieldNameParser {
 
     /**
-     * Returns the key that we use to find the JSON data.
-     * @param fieldName - the name of field
-     * @return the name of the JSON key
+     * Returns the key that we use to find the correct data.
+     * @param inKey - the name of key
+     * @return the name of the data key
      */
-    public String getJsonKey(String fieldName);
+    public String getKey(String inKey);
 }

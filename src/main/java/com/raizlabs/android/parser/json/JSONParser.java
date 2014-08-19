@@ -146,7 +146,7 @@ public class JSONParser<Result, InputType, ListInputType> implements Parser<Resu
 
                     // Wrap the field name in the Field name parser
                     valueFromJSON = inJSONObject.opt(ClassFieldMap
-                            .getFieldNameParser(inDataObject).getJsonKey(key));
+                            .getFieldNameParser(inDataObject).getKey(key));
                     if(valueFromJSON != null && (!(inDataObject instanceof FieldParsible) ||
                             !((FieldParsible) inDataObject).parseField(key, new Setter(f, inDataObject),
                                     valueFromJSON)) && f != null) {

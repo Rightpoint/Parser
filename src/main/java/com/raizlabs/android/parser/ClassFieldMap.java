@@ -13,8 +13,8 @@ public class ClassFieldMap {
 
     private static final FieldNameParser DEFAULT_PARSER = new FieldNameParser() {
         @Override
-        public String getJsonKey(String fieldName) {
-            return fieldName;
+        public String getKey(String inKey) {
+            return inKey;
         }
     };
 

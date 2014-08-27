@@ -20,8 +20,6 @@ buildscript {
 apply plugin: 'com.android.library'
 apply plugin: 'RaizLibraryPlugin'
 
-apply from: 'configuration.gradle'
-
 android {
     compileSdkVersion 20
     buildToolsVersion "20.0.0"
@@ -30,8 +28,8 @@ android {
         applicationId "com.raizlabs.android.parser"
         minSdkVersion 3
         targetSdkVersion 20
-        versionCode 1
-        versionName "1.0"
+        versionName = version.replace("-SNAPSHOT", "")
+        versionCode = Integer.parseInt(versionName.replace(".", ""))
     }
     buildTypes {
         release {

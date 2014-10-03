@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Provides a nice way to merge specific keys into an object
  * without declaring a model implementation or needing a nested object.
  */
-public abstract class ObjectMerger<Result> {
+public abstract class ObjectMerger<Result> implements ObjectMergerInterface {
 
     /**
      * The data as a consequence of the merge process. This can be any object.
@@ -36,10 +36,8 @@ public abstract class ObjectMerger<Result> {
         return mData;
     }
 
-    /**
-     * Returns the keys that the object is associated with.
-     * @return
-     */
+
+    @Override
     public ArrayList<String> getKeys(){
         if(mKeys == null) {
             mKeys = new ArrayList<String>();
@@ -54,10 +52,4 @@ public abstract class ObjectMerger<Result> {
      */
     protected abstract void buildKeys(ArrayList<String> keys);
 
-    /**
-     * Handles how we want to merge data into this class.
-     * @param key - the json key
-     * @param data - the value of the data
-     */
-    public abstract void merge(String key, Object data);
 }

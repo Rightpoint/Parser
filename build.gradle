@@ -12,8 +12,8 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:0.13.+'
-        classpath 'com.raizlabs.android-modules:RaizLibraryPlugin:1.0.0'
-        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:2.2.4"
+        classpath 'com.raizlabs.android-modules:RaizLibraryPlugin:1.0.9'
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:2.2.5"
     }
 }
 

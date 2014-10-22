@@ -12,13 +12,15 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:0.13.+'
-        classpath 'com.raizlabs.android-modules:RaizLibraryPlugin:1.0.9'
+        classpath 'com.raizlabs.android-modules:libraryplugin:1.0.12'
+        classpath 'com.raizlabs.android-modules:artifactorypublisher:1.0.0'
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:2.2.5"
     }
 }
 
 apply plugin: 'com.android.library'
-apply plugin: 'RaizLibraryPlugin'
+apply plugin: 'com.raizlabs.libraryplugin'
+apply plugin: 'com.raizlabs.artifactorypublisher'
 
 android {
     compileSdkVersion 20
@@ -31,10 +33,13 @@ android {
         versionName = version.replace("-SNAPSHOT", "")
         versionCode = Integer.parseInt(versionName.replace(".", ""))
     }
-    buildTypes {
-        release {
-            runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
+}
+
+task androidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.sourceFiles
+}
+
+artifacts {
+    archives androidSourcesJar
 }

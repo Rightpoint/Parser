@@ -4,23 +4,12 @@
 
 ## Getting Started
 
-Including in your project: 
-
-1. Clone this repo into /ProjectRoot/Libraries/
-2. Add this line to your settings.gradle:
-
-```groovy
-
-  include ':Libraries:Parser'
-
-```
-
-3. Add this line to your build.gradle:
+Add this line to your build.gradle:
 
 ```groovy
 
   dependencies {
-    compile project(':Libraries:Parser');
+    dependency "Parser"
   }
 
 ```

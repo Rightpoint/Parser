@@ -17,35 +17,3 @@ buildscript {
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:2.2.5"
     }
 }
-
-apply plugin: 'com.android.library'
-apply plugin: 'com.raizlabs.libraryplugin'
-apply plugin: 'com.raizlabs.artifactorypublisher'
-
-android {
-    compileSdkVersion 21
-    buildToolsVersion "21.0.2"
-
-    defaultConfig {
-        applicationId "com.raizlabs.android.parser"
-        minSdkVersion 3
-        targetSdkVersion 21
-        versionName = version.replace("-SNAPSHOT", "")
-        versionCode = Integer.parseInt(versionName.replace(".", ""))
-    }
-}
-
-if(project.getTasks().findByPath("artifactoryPublish") != null) {
-    artifactoryPublish.dependsOn {
-        androidSourcesJar
-    }
-
-    task androidSourcesJar(type: Jar) {
-        classifier = 'sources'
-        from android.sourceSets.main.java.sourceFiles
-    }
-
-    artifacts {
-        archives androidSourcesJar
-    }
-}

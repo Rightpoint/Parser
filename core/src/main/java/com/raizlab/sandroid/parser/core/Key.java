@@ -1,4 +1,4 @@
-package com.raizlabs.android.parser;
+package com.raizlab.sandroid.parser.core;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

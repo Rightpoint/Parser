@@ -1,6 +1,6 @@
 package com.raizlabs.android.parser;
 
-import com.raizlab.sandroid.parser.core.Key;
+import com.raizlabs.android.parser.core.Key;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

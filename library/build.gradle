@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'android-apt'
 apply plugin: 'com.raizlabs.libraryplugin'
 apply plugin: 'com.raizlabs.artifactorypublisher'
 
@@ -13,10 +14,20 @@ android {
         versionName = version.replace("-SNAPSHOT", "")
         versionCode = Integer.parseInt(versionName.replace(".", ""))
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+    }
 }
 
 dependencies {
     compile project(':core')
+    androidTestApt project(':compiler')
 }
 
 if(project.getTasks().findByPath("artifactoryPublish") != null) {

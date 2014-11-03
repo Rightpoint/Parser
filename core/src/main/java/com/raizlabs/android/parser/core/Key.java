@@ -1,4 +1,4 @@
-package com.raizlab.sandroid.parser.core;
+package com.raizlabs.android.parser.core;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * Description: Describes the key that the field object references.
  * If the key has a different class than the object it references, a handler should be defined.
  */
-@Retention(RetentionPolicy.RUNTIME)
+@Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.FIELD)
 public @interface Key {
     String name() default "";

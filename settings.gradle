@@ -1,7 +1,4 @@
 rootProject.name = buildName
 
-include ':core'
-include ':compiler'
-
-include ':library'
+include ':app' ,':library', ':compiler', ':core'
 

@@ -129,10 +129,23 @@ public class ParserHolder {
         return parser;
     }
 
+    /**
+     * internal method that will add each {@link com.raizlabs.android.parser.ObjectParser} automatically
+     *
+     * @param parseableClass The class that is annotated with {@link com.raizlabs.android.parser.core.Parseable}
+     * @param objectParser   The corresponding {@link com.raizlabs.android.parser.ObjectParser} for that class.
+     */
     static void addParseable(Class<?> parseableClass, ObjectParser objectParser) {
         mParseableMap.put(parseableClass, objectParser);
     }
 
+    /**
+     * Internal method for adding a {@link com.raizlabs.android.parser.Parser} for the specified data type class such as
+     * {@link org.json.JSONObject}
+     *
+     * @param clazz  Used when we parse an object of certain type, it is used to retrieve the {@link com.raizlabs.android.parser.Parser} for it.
+     * @param parser Describes how to parse the specified data type
+     */
     static void addParseInterface(Class<?> clazz, Parser parser) {
         mParseMap.put(clazz, parser);
     }

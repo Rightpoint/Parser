@@ -100,24 +100,26 @@ public class KeyDefinition implements Writer {
 
     boolean isPrimitive = false;
 
+    boolean isFieldParser = false;
+
     public KeyDefinition(ParserManager manager, VariableElement element) {
         this.element = element;
 
         Key key = element.getAnnotation(Key.class);
         keyName = key.name();
         variableName = element.getSimpleName().toString();
-        if(keyName == null || keyName.isEmpty()) {
+        if (keyName == null || keyName.isEmpty()) {
             keyName = variableName;
         }
 
         TypeMirror typeMirror = element.asType();
 
-        if(typeMirror.getKind().isPrimitive()) {
+        if (typeMirror.getKind().isPrimitive()) {
             variableTypeElement = manager.getTypes().boxedClass((PrimitiveType) element.asType());
             type = Type.NORMAL;
             isPrimitive = true;
         } else {
-            if(typeMirror instanceof ArrayType) {
+            if (typeMirror instanceof ArrayType) {
                 ArrayType arrayType = (ArrayType) typeMirror;
                 variableTypeElement = manager.getElements().getTypeElement(arrayType.getComponentType().toString());
                 componentTypeElement = variableTypeElement;
@@ -126,17 +128,17 @@ public class KeyDefinition implements Writer {
             } else {
                 variableTypeElement = manager.getElements().getTypeElement(manager.getTypes().erasure(element.asType()).toString());
 
-                if (ProcessorUtils.implementsClass(manager, "java.util.List", variableTypeElement) && typeMirror instanceof DeclaredType ) {
-                    if(((DeclaredType) typeMirror).getTypeArguments().size() > 0) {
+                if (ProcessorUtils.implementsClass(manager, "java.util.List", variableTypeElement) && typeMirror instanceof DeclaredType) {
+                    if (((DeclaredType) typeMirror).getTypeArguments().size() > 0) {
                         componentTypeElement = manager.getElements().getTypeElement(((DeclaredType) typeMirror).getTypeArguments().get(0).toString());
                     } else {
                         componentTypeElement = manager.getElements().getTypeElement("java.lang.Object");
                     }
                     componentType = componentTypeElement.toString();
                     type = Type.LIST;
-                } else if(ProcessorUtils.implementsClass(manager, "java.util.Map", variableTypeElement) && typeMirror instanceof DeclaredType) {
-                    if(((DeclaredType) typeMirror).getTypeArguments().size() > 0) {
-                        List<? extends TypeMirror> typeMirrors =  ((DeclaredType) typeMirror).getTypeArguments();
+                } else if (ProcessorUtils.implementsClass(manager, "java.util.Map", variableTypeElement) && typeMirror instanceof DeclaredType) {
+                    if (((DeclaredType) typeMirror).getTypeArguments().size() > 0) {
+                        List<? extends TypeMirror> typeMirrors = ((DeclaredType) typeMirror).getTypeArguments();
                         componentTypeElement = manager.getElements().getTypeElement(typeMirrors.get(0).toString());
                         secondComponentTypeElement = manager.getElements().getTypeElement(typeMirrors.get(1).toString());
 
@@ -144,16 +146,18 @@ public class KeyDefinition implements Writer {
                         secondaryComponentType = secondComponentTypeElement.asType().toString();
                     }
                     type = Type.MAP;
-                }
-
-                else {
+                } else {
                     type = Type.NORMAL;
                 }
             }
         }
 
+        if(type.equals(Type.NORMAL)) {
+            isFieldParser = ProcessorUtils.implementsClass(manager, Classes.FIELD_PARSIBLE, variableTypeElement);
+        }
+
         variableType = element.asType().toString();
-        if(type.equals(Type.MAP)) {
+        if (type.equals(Type.MAP)) {
             hasParser = true;
         } else {
             hasParser = type.needsComponent() ? componentTypeElement.getAnnotation(Parseable.class) != null : variableTypeElement.getAnnotation(Parseable.class) != null;
@@ -163,17 +167,21 @@ public class KeyDefinition implements Writer {
     @Override
     public void write(JavaWriter javaWriter) throws IOException {
         String getValue = String.format("parse.getValue(instance,\"%1s\")", keyName);
-        if(!hasParser) {
-            javaWriter.emitStatement("parseable.%1s = ((%1s) " + getValue +")", variableName, variableType);
+        if (!hasParser) {
+            javaWriter.emitStatement("parseable.%1s = ((%1s) " + getValue + ")", variableName, variableType);
         } else {
-            String parseStatment= "parseable.%1s = ((%1s) %1s.%1s(";
-            if(!type.equals(Type.MAP)) {
+            String parseStatment = "parseable.%1s = ((%1s) %1s.%1s(";
+            if (!type.equals(Type.MAP)) {
                 javaWriter.emitStatement(parseStatment + "%1s.class, " + getValue + "))", variableName, variableType,
                         Classes.PARSER_HOLDER, type.getParseMethod(), type.needsComponent() ? componentType : variableType);
             } else {
                 javaWriter.emitStatement(parseStatment + "%1s.class, %1s.class, " + getValue + "))", variableName, variableType,
                         Classes.PARSER_HOLDER, type.getParseMethod(), componentType, secondaryComponentType);
             }
+        }
+
+        if(isFieldParser) {
+            javaWriter.emitStatement("((%1s)parseable.%1s).parse(%1s, %1s)", Classes.FIELD_PARSIBLE, variableName, "instance", "parse");
         }
     }
 }

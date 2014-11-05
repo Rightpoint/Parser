@@ -11,7 +11,8 @@ import java.util.Map;
 /**
  * Author: andrewgrosner
  * Contributors: { }
- * Description:
+ * Description: A handy class that assists in creating a {@link com.raizlabs.android.parser.Parser}. Call these methods for
+ * your {@link com.raizlabs.android.parser.Parser} class when using JSON.
  */
 public class JSON {
 

@@ -1,5 +1,7 @@
 package com.raizlabs.android.parserapp.app;
 
+import com.raizlabs.android.parser.FieldParsible;
+import com.raizlabs.android.parser.Parser;
 import com.raizlabs.android.parser.core.Key;
 import com.raizlabs.android.parser.core.Parseable;
 
@@ -12,7 +14,7 @@ import java.util.Map;
  * Description:
  */
 @Parseable
-public class ComplexClass {
+public class ComplexClass implements FieldParsible {
 
     @Key
     String name;
@@ -40,4 +42,9 @@ public class ComplexClass {
 
     @Key
     Map<String, SimpleClass> simpleClassMap;
+
+    @Override
+    public void parse(Object dataInstance, Parser parser) {
+
+    }
 }

@@ -98,13 +98,10 @@ public class KeyDefinition implements Writer {
 
     Type type;
 
-    boolean isFirstKey;
-
     boolean isPrimitive = false;
 
-    public KeyDefinition(boolean isFirstKey, ParserManager manager, VariableElement element) {
+    public KeyDefinition(ParserManager manager, VariableElement element) {
         this.element = element;
-        this.isFirstKey = isFirstKey;
 
         Key key = element.getAnnotation(Key.class);
         keyName = key.name();
@@ -165,21 +162,16 @@ public class KeyDefinition implements Writer {
 
     @Override
     public void write(JavaWriter javaWriter) throws IOException {
-        String statement = "if (key.equals(\"%1s\"))";
-        if(isFirstKey) {
-            javaWriter.beginControlFlow(statement, keyName);
-        } else {
-            javaWriter.nextControlFlow("else " + statement, keyName);
-        }
+        String getValue = String.format("parse.getValue(instance,\"%1s\")", keyName);
         if(!hasParser) {
-            javaWriter.emitStatement("parseable.%1s = ((%1s) value)", variableName, variableType);
+            javaWriter.emitStatement("parseable.%1s = ((%1s) " + getValue +")", variableName, variableType);
         } else {
             String parseStatment= "parseable.%1s = ((%1s) %1s.%1s(";
             if(!type.equals(Type.MAP)) {
-                javaWriter.emitStatement(parseStatment + "%1s.class, value))", variableName, variableType,
+                javaWriter.emitStatement(parseStatment + "%1s.class, " + getValue + "))", variableName, variableType,
                         Classes.PARSER_HOLDER, type.getParseMethod(), type.needsComponent() ? componentType : variableType);
             } else {
-                javaWriter.emitStatement(parseStatment + "%1s.class, %1s.class, value))", variableName, variableType,
+                javaWriter.emitStatement(parseStatment + "%1s.class, %1s.class, " + getValue + "))", variableName, variableType,
                         Classes.PARSER_HOLDER, type.getParseMethod(), componentType, secondaryComponentType);
             }
         }

@@ -30,6 +30,7 @@ public class ParserTest extends AndroidTestCase {
             jsonObject.put("math", 2.5d);
             jsonObject.put("truth", true);
             jsonObject.put("number", 5);
+            jsonObject.put("hidden", "Hidden Here");
 
             JSONObject simpleClass = new JSONObject();
             simpleClass.put("name", "Testy");

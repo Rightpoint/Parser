@@ -1,16 +1,20 @@
 package com.raizlabs.android.parser;
 
 /**
- * This enables certain data objects to listen for when the parsing occurs and provide some kind of custom
- * handling of certain fields.
+ * Author: andrewgrosner
+ * Contributors: { }
+ * Description: Implement this interface to mark your {@link com.raizlabs.android.parser.core.Parseable} or {@link com.raizlabs.android.parser.core.Key}
+ * for manual parsing of the object. This is useful when you want to separately parse out data from an object in a custom way.
  */
-public interface FieldParsible<T> {
+public interface FieldParsible {
+
     /**
-     * Allows a class getting parsed to provide a custom parse to the type of data coming in.
-     * @param inFieldName - name of the field
-     * @param inSetter - set the field value here
-     * @param inData - the data coming from parse
-     * @return true if we handled the field manually, false to parse it automatically
+     * Called when the top-level object is parsed. The data passed in should not be accessed directly.
+     * Instead use {@link com.raizlabs.android.parser.Parser#getValue(Object, String)} on the object to get the data. If you know the
+     * data will be of another instance of the dataInstance, use the {@link com.raizlabs.android.parser.ParserHolder}'s methods for specific types.
+     *
+     * @param dataInstance The data that is getting parsed.
+     * @param parser       The {@link com.raizlabs.android.parser.Parser} that is used to interface with the data.
      */
-    boolean parseField(String inFieldName, Setter inSetter, T inData);
+    public void parse(Object dataInstance, Parser parser);
 }

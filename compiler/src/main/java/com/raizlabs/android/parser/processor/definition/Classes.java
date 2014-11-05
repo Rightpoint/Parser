@@ -13,9 +13,11 @@ public class Classes {
 
     public static final String PARSER_HOLDER = PARSER_PACKAGE + ".ParserHolder";
 
-    public static final CharSequence PARSE_INTERFACE = PARSER_PACKAGE + ".ParseInterface";
+    public static final String PARSE_INTERFACE = PARSER_PACKAGE + ".Parser";
 
     public static final String PARSER_MANAGER_INTERFACE = PARSER_PACKAGE + ".ParserManagerInterface";
+
+    public static final String FIELD_PARSIBLE = PARSER_PACKAGE + ".FieldParsible";
 }
 
 

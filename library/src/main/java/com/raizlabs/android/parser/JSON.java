@@ -1,7 +1,5 @@
-package com.raizlabs.android.parser.json;
+package com.raizlabs.android.parser;
 
-import com.raizlabs.android.parser.ObjectParser;
-import com.raizlabs.android.parser.ParserHolder;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -17,21 +15,17 @@ import java.util.Map;
  */
 public class JSON {
 
-    public static Object parse(Class<?> returnType, JSONObject jsonObject) {
+    public static Object parse(Parser parser, Class<?> returnType, JSONObject jsonObject) {
         ObjectParser objectParser = ParserHolder.getParseable(returnType);
         Object instance = objectParser.getInstance();
-        parse(instance, jsonObject);
+        parse(parser, instance, jsonObject);
         return instance;
     }
 
 
-    public static void parse(Object instance, JSONObject jsonObject) {
+    public static void parse(Parser parser, Object instance, JSONObject jsonObject) {
         ObjectParser objectParser = ParserHolder.getParseable(instance.getClass());
-        Iterator<String> keys = jsonObject.keys();
-        while (keys.hasNext()) {
-            String key = keys.next();
-            objectParser.setValue(instance, key, jsonObject.opt(key));
-        }
+        objectParser.parse(instance, jsonObject, parser);
     }
 
     public static List parseList(Class<?> returnType, Class<? extends List> listClass, JSONArray inData) {

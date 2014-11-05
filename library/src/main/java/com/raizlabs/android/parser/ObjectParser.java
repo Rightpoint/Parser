@@ -5,10 +5,11 @@ package com.raizlabs.android.parser;
  * Contributors: { }
  * Description: Internal usage that will generate how to parse an object
  */
-public interface ObjectParser<ParseableClass> {
+public interface ObjectParser<ParseableClass>  {
 
     public ParseableClass getInstance();
 
-    public void setValue(ParseableClass parseableClass, String key, Object value);
+    public void parse(ParseableClass parsible, Object instance, Parser parser);
+
 
 }

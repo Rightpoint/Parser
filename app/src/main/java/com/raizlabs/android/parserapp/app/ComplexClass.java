@@ -2,6 +2,7 @@ package com.raizlabs.android.parserapp.app;
 
 import com.raizlabs.android.parser.FieldParsible;
 import com.raizlabs.android.parser.Parser;
+import com.raizlabs.android.parser.core.FieldParseable;
 import com.raizlabs.android.parser.core.Key;
 import com.raizlabs.android.parser.core.Parseable;
 
@@ -32,6 +33,7 @@ public class ComplexClass implements FieldParsible {
     boolean truth;
 
     @Key
+    @FieldParseable
     SimpleClass otherClass;
 
     @Key

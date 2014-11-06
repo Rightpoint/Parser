@@ -54,7 +54,11 @@ public class ParserHolder {
     @SuppressWarnings("unchecked")
     public static <ReturnType> ReturnType parse(Class<ReturnType> returnTypeClass, Object object) {
         getManager();
-        return (ReturnType) getParser(object.getClass()).parse(returnTypeClass, object);
+        ReturnType returnType = null;
+        if(object != null) {
+            returnType = (ReturnType) getParser(object.getClass()).parse(returnTypeClass, object);
+        }
+        return returnType;
     }
 
     /**
@@ -69,7 +73,11 @@ public class ParserHolder {
     @SuppressWarnings("unchecked")
     public static <ReturnType> ReturnType[] parseArray(Class<ReturnType> returnTypeClass, Object arrayType) {
         getManager();
-        return (ReturnType[]) getParser(arrayType.getClass()).parseArray(returnTypeClass, arrayType);
+        ReturnType[] returnTypes = null;
+        if(arrayType != null) {
+            returnTypes = (ReturnType[]) getParser(arrayType.getClass()).parseArray(returnTypeClass, arrayType);
+        }
+        return returnTypes;
     }
 
     /**
@@ -84,7 +92,11 @@ public class ParserHolder {
     @SuppressWarnings("unchecked")
     public static <ReturnType> List<ReturnType> parseList(Class<ReturnType> returnTypeClass, Object listType) {
         getManager();
-        return (List<ReturnType>) getParser(listType.getClass()).parseList(returnTypeClass, listType);
+        List<ReturnType> returnTypes = null;
+        if(listType != null) {
+            returnTypes = (List<ReturnType>) getParser(listType.getClass()).parseList(returnTypeClass, listType);
+        }
+        return returnTypes;
     }
 
     /**
@@ -100,7 +112,11 @@ public class ParserHolder {
     @SuppressWarnings("unchecked")
     public static <KeyType, ValueType> Map<KeyType, ValueType> parseMap(Class<KeyType> keyTypeClass, Class<ValueType> valueTypeClass, Object object) {
         getManager();
-        return (Map<KeyType, ValueType>) getParser(object.getClass()).parseMap(valueTypeClass, object);
+        Map<KeyType, ValueType> map = null;
+        if(object != null) {
+            map = (Map<KeyType, ValueType>) getParser(object.getClass()).parseMap(valueTypeClass, object);
+        }
+        return map;
     }
 
     /**

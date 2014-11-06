@@ -45,6 +45,7 @@ public class ParseableDefinition extends BaseDefinition implements Writer {
 
     @Override
     public void onWriteDefinition(JavaWriter javaWriter) throws IOException {
+
         javaWriter.emitEmptyLine();
         javaWriter.emitAnnotation(Override.class);
         javaWriter.beginMethod(elementClassName, "getInstance", METHOD_MODIFIERS);

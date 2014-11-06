@@ -2,7 +2,6 @@ package com.raizlabs.android.parser.processor;
 
 import com.google.auto.service.AutoService;
 import com.raizlabs.android.parser.core.Key;
-import com.raizlabs.android.parser.core.ObjectMerger;
 import com.raizlabs.android.parser.core.ParseInterface;
 import com.raizlabs.android.parser.processor.handler.ParseInterfaceHandler;
 import com.raizlabs.android.parser.processor.handler.ParseableHandler;
@@ -38,7 +37,6 @@ public class ParserProcessor extends AbstractProcessor {
     public Set<String> getSupportedAnnotationTypes() {
         Set<String> classes = new LinkedHashSet<>();
         classes.add(Key.class.getName());
-        classes.add(ObjectMerger.class.getName());
         classes.add(ParseInterface.class.getName());
         return classes;
     }

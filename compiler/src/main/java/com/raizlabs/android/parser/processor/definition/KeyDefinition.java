@@ -1,5 +1,6 @@
 package com.raizlabs.android.parser.processor.definition;
 
+import com.raizlabs.android.parser.core.FieldParseable;
 import com.raizlabs.android.parser.core.Key;
 import com.raizlabs.android.parser.core.Parseable;
 import com.raizlabs.android.parser.processor.ParserManager;
@@ -102,6 +103,8 @@ public class KeyDefinition implements Writer {
 
     boolean isFieldParser = false;
 
+    boolean shouldCreateFieldParser = false;
+
     public KeyDefinition(ParserManager manager, VariableElement element) {
         this.element = element;
 
@@ -152,8 +155,12 @@ public class KeyDefinition implements Writer {
             }
         }
 
-        if(type.equals(Type.NORMAL)) {
-            isFieldParser = ProcessorUtils.implementsClass(manager, Classes.FIELD_PARSIBLE, variableTypeElement);
+        if (type.equals(Type.NORMAL)) {
+            FieldParseable fieldParseable = element.getAnnotation(FieldParseable.class);
+            isFieldParser = ProcessorUtils.implementsClass(manager, Classes.FIELD_PARSIBLE, variableTypeElement) && fieldParseable != null;
+            if(fieldParseable != null) {
+                shouldCreateFieldParser = fieldParseable.shouldCreateClass();
+            }
         }
 
         variableType = element.asType().toString();
@@ -166,18 +173,23 @@ public class KeyDefinition implements Writer {
 
     @Override
     public void write(JavaWriter javaWriter) throws IOException {
-        String getValue = String.format("parse.getValue(instance,\"%1s\")", keyName);
-        if (!hasParser) {
-            javaWriter.emitStatement("parseable.%1s = ((%1s) " + getValue + ")", variableName, variableType);
-        } else {
-            String parseStatment = "parseable.%1s = ((%1s) %1s.%1s(";
-            if (!type.equals(Type.MAP)) {
-                javaWriter.emitStatement(parseStatment + "%1s.class, " + getValue + "))", variableName, variableType,
-                        Classes.PARSER_HOLDER, type.getParseMethod(), type.needsComponent() ? componentType : variableType);
+
+        if(!shouldCreateFieldParser) {
+            String getValue = String.format("parse.getValue(instance,\"%1s\")", keyName);
+            if (!hasParser) {
+                javaWriter.emitStatement("parseable.%1s = ((%1s) " + getValue + ")", variableName, variableType);
             } else {
-                javaWriter.emitStatement(parseStatment + "%1s.class, %1s.class, " + getValue + "))", variableName, variableType,
-                        Classes.PARSER_HOLDER, type.getParseMethod(), componentType, secondaryComponentType);
+                String parseStatment = "parseable.%1s = ((%1s) %1s.%1s(";
+                if (!type.equals(Type.MAP)) {
+                    javaWriter.emitStatement(parseStatment + "%1s.class, " + getValue + "))", variableName, variableType,
+                            Classes.PARSER_HOLDER, type.getParseMethod(), type.needsComponent() ? componentType : variableType);
+                } else {
+                    javaWriter.emitStatement(parseStatment + "%1s.class, %1s.class, " + getValue + "))", variableName, variableType,
+                            Classes.PARSER_HOLDER, type.getParseMethod(), componentType, secondaryComponentType);
+                }
             }
+        } else {
+            javaWriter.emitStatement("parseable.%1s = new %1s()", variableName, variableType);
         }
 
         if(isFieldParser) {

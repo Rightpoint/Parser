@@ -8,12 +8,12 @@ import com.raizlabs.android.parser.Parser;
  * Contributors: { }
  * Description:
  */
-public class SimpleFieldParser implements FieldParsible<ComplexClass> {
+public class SimpleFieldParser implements FieldParsible {
 
     String hidden;
 
     @Override
-    public void parse(ComplexClass parseable, Object instance, Parser parser) {
-        hidden = (String) parser.getValue(instance, "Hidden Here");
+    public void parse(Object instance, Parser parser) {
+        hidden = (String) parser.getValue(instance, "hidden");
     }
 }

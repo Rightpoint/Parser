@@ -14,7 +14,7 @@ import java.util.Map;
  * Description:
  */
 @Parseable
-public class ComplexClass implements FieldParsible<ComplexClass> {
+public class ComplexClass implements FieldParsible {
 
     @Key
     String name;
@@ -44,6 +44,9 @@ public class ComplexClass implements FieldParsible<ComplexClass> {
     Map<String, SimpleClass> simpleClassMap;
 
     String hidden;
+
+    @Key
+    SimpleFieldParser simpleFieldParser;
 
     @Override
     public void parse(Object dataInstance, Parser parser) {

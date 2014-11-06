@@ -2,12 +2,10 @@ package com.raizlabs.android.parser.test;
 
 import android.test.AndroidTestCase;
 import com.raizlabs.android.parser.ParserHolder;
-import com.raizlabs.android.parser.json.JSONParser;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -18,8 +16,6 @@ import java.util.Set;
  * Description:
  */
 public class ParserTest extends AndroidTestCase {
-
-    private static JSONParser<SimpleClass, JSONObject, JSONArray> parser = new JSONParser<>();
 
     public void testSimpleClass() {
 
@@ -51,7 +47,7 @@ public class ParserTest extends AndroidTestCase {
 
         ComplexClass complexClass = ParserHolder.parse(ComplexClass.class, jsonObject);
         testComplexClass(complexClass);
-        testSimpleClass(complexClass.otherClass);
+        assertEquals(complexClass.otherClass.name, "Test");
         SimpleClass[] simpleClasses = complexClass.simpleClasses;
         for(SimpleClass simpleClass: simpleClasses) {
             testSimpleClass(simpleClass);
@@ -74,10 +70,12 @@ public class ParserTest extends AndroidTestCase {
     }
 
     private void testComplexClass(ComplexClass complexClass) {
+        assertEquals(complexClass.hidden, "Hidden Here");
         assertEquals(complexClass.name, "Test");
         assertEquals(complexClass.date, 1000);
         assertEquals(complexClass.math, 2.5d);
         assertEquals(complexClass.truth, true);
         assertEquals(complexClass.number, 5);
+        assertEquals(complexClass.simpleFieldParser.hidden, "Hidden Here");
     }
 }

@@ -4,6 +4,8 @@ import com.raizlabs.android.parser.core.ParseInterface;
 import com.raizlabs.android.parser.processor.ParserManager;
 import com.raizlabs.android.parser.processor.definition.BaseDefinition;
 import com.raizlabs.android.parser.processor.definition.ParseInterfaceDefinition;
+import com.raizlabs.android.parser.processor.validation.ParseInterfaceValidator;
+import com.raizlabs.android.parser.processor.validation.Validator;
 
 import javax.lang.model.element.TypeElement;
 
@@ -21,5 +23,10 @@ public class ParseInterfaceHandler extends BaseHandler {
     @Override
     protected BaseDefinition createDefinition(TypeElement typeElement, ParserManager manager) {
         return new ParseInterfaceDefinition(typeElement, manager);
+    }
+
+    @Override
+    protected Validator getValidator() {
+        return new ParseInterfaceValidator();
     }
 }

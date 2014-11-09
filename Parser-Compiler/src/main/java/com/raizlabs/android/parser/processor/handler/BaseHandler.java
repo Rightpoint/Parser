@@ -2,6 +2,7 @@ package com.raizlabs.android.parser.processor.handler;
 
 import com.raizlabs.android.parser.processor.ParserManager;
 import com.raizlabs.android.parser.processor.definition.BaseDefinition;
+import com.raizlabs.android.parser.processor.validation.Validator;
 import com.squareup.javawriter.JavaWriter;
 
 import javax.annotation.processing.RoundEnvironment;
@@ -37,14 +38,19 @@ public abstract class BaseHandler implements Handler {
 
     protected void onProcessElement(ParserManager parserManager, Element element) {
         BaseDefinition definition = createDefinition((TypeElement) element, parserManager);
-        try {
-            JavaWriter javaWriter = new JavaWriter(parserManager.getFiler().createSourceFile(definition.getSourceFileName()).openWriter());
-            definition.write(javaWriter);
-            javaWriter.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        Validator validator = getValidator();
+        if(validator.validate(parserManager, definition)) {
+            try {
+                JavaWriter javaWriter = new JavaWriter(parserManager.getFiler().createSourceFile(definition.getSourceFileName()).openWriter());
+                definition.write(javaWriter);
+                javaWriter.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
     protected abstract BaseDefinition createDefinition(TypeElement typeElement, ParserManager manager);
+
+    protected abstract Validator getValidator();
 }

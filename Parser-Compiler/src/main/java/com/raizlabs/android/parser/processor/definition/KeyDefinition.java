@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class KeyDefinition implements Writer {
 
-    private enum Type {
+    public enum Type {
         ARRAY {
             @Override
             public String getParseMethod() {
@@ -89,15 +89,15 @@ public class KeyDefinition implements Writer {
 
     public String secondaryComponentType;
 
-    TypeElement variableTypeElement;
+    public TypeElement variableTypeElement;
 
-    TypeElement componentTypeElement;
+    public TypeElement componentTypeElement;
 
-    TypeElement secondComponentTypeElement;
+    public TypeElement secondComponentTypeElement;
 
     boolean hasParser = false;
 
-    Type type;
+    public Type type;
 
     boolean isPrimitive = false;
 
@@ -126,7 +126,10 @@ public class KeyDefinition implements Writer {
                 ArrayType arrayType = (ArrayType) typeMirror;
                 variableTypeElement = manager.getElements().getTypeElement(arrayType.getComponentType().toString());
                 componentTypeElement = variableTypeElement;
-                componentType = variableTypeElement.asType().toString();
+
+                if(variableTypeElement != null) {
+                    componentType = variableTypeElement.asType().toString();
+                }
                 type = Type.ARRAY;
             } else {
                 variableTypeElement = manager.getElements().getTypeElement(manager.getTypes().erasure(element.asType()).toString());
@@ -137,7 +140,9 @@ public class KeyDefinition implements Writer {
                     } else {
                         componentTypeElement = manager.getElements().getTypeElement("java.lang.Object");
                     }
-                    componentType = componentTypeElement.toString();
+                    if(componentTypeElement != null) {
+                        componentType = componentTypeElement.toString();
+                    }
                     type = Type.LIST;
                 } else if (ProcessorUtils.implementsClass(manager, "java.util.Map", variableTypeElement) && typeMirror instanceof DeclaredType) {
                     if (((DeclaredType) typeMirror).getTypeArguments().size() > 0) {
@@ -145,8 +150,10 @@ public class KeyDefinition implements Writer {
                         componentTypeElement = manager.getElements().getTypeElement(typeMirrors.get(0).toString());
                         secondComponentTypeElement = manager.getElements().getTypeElement(typeMirrors.get(1).toString());
 
-                        componentType = componentTypeElement.asType().toString();
-                        secondaryComponentType = secondComponentTypeElement.asType().toString();
+                        if(componentTypeElement != null && secondComponentTypeElement != null) {
+                            componentType = componentTypeElement.asType().toString();
+                            secondaryComponentType = secondComponentTypeElement.asType().toString();
+                        }
                     }
                     type = Type.MAP;
                 } else {

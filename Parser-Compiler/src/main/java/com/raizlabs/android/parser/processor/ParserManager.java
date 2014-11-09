@@ -97,8 +97,8 @@ public class ParserManager implements Handler, Writer, Definition {
         return filer;
     }
 
-    public void logError(String error) {
-        messager.printMessage(Diagnostic.Kind.ERROR, error);
+    public void logError(String error, Object...args) {
+        messager.printMessage(Diagnostic.Kind.ERROR, String.format(error, args));
     }
 
     @Override

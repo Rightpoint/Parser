@@ -27,7 +27,7 @@ android {
 
 dependencies {
     compile project(':core')
-    androidTestApt project(':compiler')
+    androidTestApt project(':Parser-Compiler')
 }
 
 if(project.getTasks().findByPath("artifactoryPublish") != null) {

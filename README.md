@@ -46,17 +46,21 @@ public void someMethod(JSONObject json) {
 
 Parser supports a good amount of flexible features that make this library very powerful.
 
-### Annotations + Purpose
+### Annotations
 
 ```@Parseable``` will generate a ```$ParseDefinition``` class used in parsing the object
 
-```@FieldParsible``` marks a field as suscribing to the parse event data of parent ```@Parseable```. Must implement the ```FieldParsible``` interface. 
+```@FieldParseable``` marks a field as suscribing to the parse event data of parent ```@Parseable```. Must implement the ```FieldParsible``` interface. 
 
 ```@ParseInterface``` used in conjunction with ```Parser``` interface to define parsers for a type of data object.
 
 ```@Key``` tells the **Parser*** what key to reference for a specific field. The key is defaulted to the name of the field.
 
 ### Example
+
+#### Parseable
+
+
 
 #### FieldParsible
 
@@ -74,6 +78,8 @@ public class AppFeatureControl implements FieldParsible{
 }
 
 ```
+
+#### Json Parser Example
 
 ```java
 

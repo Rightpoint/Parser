@@ -1,0 +1,46 @@
+apply plugin: 'com.android.library'
+apply plugin: 'android-apt'
+apply plugin: 'com.raizlabs.libraryplugin'
+apply plugin: 'com.raizlabs.artifactorypublisher'
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "21.0.2"
+
+    defaultConfig {
+        applicationId "com.raizlabs.android.parser"
+        minSdkVersion 3
+        targetSdkVersion 21
+        versionName = version.replace("-SNAPSHOT", "")
+        versionCode = Integer.parseInt(versionName.replace(".", ""))
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+    }
+}
+
+dependencies {
+    compile project(':core')
+    androidTestApt project(':Parser-Compiler')
+}
+
+if(project.getTasks().findByPath("artifactoryPublish") != null) {
+    artifactoryPublish.dependsOn {
+        androidSourcesJar
+    }
+
+    task androidSourcesJar(type: Jar) {
+        classifier = 'sources'
+        from android.sourceSets.main.java.sourceFiles
+    }
+
+    artifacts {
+        archives androidSourcesJar
+    }
+}

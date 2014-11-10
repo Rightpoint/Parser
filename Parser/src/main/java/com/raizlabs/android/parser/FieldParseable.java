@@ -5,7 +5,7 @@ package com.raizlabs.android.parser;
  * Description: Implement this interface to mark your {@link com.raizlabs.android.parser.core.Parseable} or {@link com.raizlabs.android.parser.core.Key}
  * for manual parsing of the object. This is useful when you want to separately parse out data from an object in a custom way.
  */
-public interface FieldParsible {
+public interface FieldParseable {
 
     /**
      * Called when the top-level object is parsed. The data passed in should not be accessed directly.

@@ -1,6 +1,6 @@
 package com.raizlabs.android.parser.test;
 
-import com.raizlabs.android.parser.FieldParsible;
+import com.raizlabs.android.parser.FieldParseable;
 import com.raizlabs.android.parser.Parser;
 
 /**
@@ -8,7 +8,7 @@ import com.raizlabs.android.parser.Parser;
  * Contributors: { }
  * Description:
  */
-public class SimpleFieldParser implements FieldParsible {
+public class SimpleFieldParser implements FieldParseable {
 
     String hidden;
 

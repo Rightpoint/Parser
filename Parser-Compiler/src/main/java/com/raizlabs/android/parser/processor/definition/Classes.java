@@ -17,7 +17,7 @@ public class Classes {
 
     public static final String PARSER_MANAGER_INTERFACE = PARSER_PACKAGE + ".ParserManagerInterface";
 
-    public static final String FIELD_PARSIBLE = PARSER_PACKAGE + ".FieldParsible";
+    public static final String FIELD_PARSIBLE = PARSER_PACKAGE + ".FieldParseable";
 }
 
 

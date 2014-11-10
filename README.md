@@ -4,23 +4,14 @@
 
 ## Getting Started
 
-### Using the RaizLibraryPlugin
-Add this line to your build.gradle:
-
-```groovy
-
-  dependencies {
-    dependency "Parser"
-  }
-
-```
 
 ### Using Standard Gradle
 
 ```groovy
 
   dependencies {
-    compile project(':Libraries:Parser')
+    apt project(':Libraries:Parser-Compiler')
+    compile project(':Libraries:Parser:Parser')
   }
 
 ```

@@ -4,6 +4,7 @@
 
 ## Getting Started
 
+### Using the RaizLibraryPlugin
 Add this line to your build.gradle:
 
 ```groovy
@@ -14,22 +15,29 @@ Add this line to your build.gradle:
 
 ```
 
+### Using Standard Gradle
+
+```groovy
+
+  dependencies {
+    compile project(':Libraries:Parser')
+  }
+
+```
+
 ## Usage
 
-Define your parser statically for memory and performance reasons. 
 
-### Example using JSONParser
+### Example
 
 ```java
 
-private static Parser<MyModelObject, JSONObject, JSONArray> parser = new JSONParser<>();
-
 public void someMethod(JSONObject json) {
-  MyModelObject parsedObject = parser.parse(MyModelObject.class, json);
+  MyModelObject parsedObject = ParserHolder.parse(MyModelObject.class, json);
 
   // or precreated
   MyModelObject modelObject = new MyModelObject();
-  parser.parse(modelObject, json);
+  ParserHolder.parse(modelObject, json);
 }
 
 ```
@@ -40,76 +48,65 @@ Parser supports a good amount of flexible features that make this library very p
 
 ### Annotations + Purpose
 
-```@Ignore``` tells the **Parser** that we do not want to evaluate this field.
+```@Parseable``` will generate a ```$ParseDefinition``` class used in parsing the object
 
-```@Key``` tells the **Parser*** what key to reference for a specific field.
+```@FieldParsible``` marks a field as suscribing to the parse event data of parent ```@Parseable```. Must implement the ```FieldParsible``` interface. 
 
-This allow the field names to be separate from the data and notify the **Parser** of which fields to leave out. 
+```@ParseInterface``` used in conjunction with ```Parser``` interface to define parsers for a type of data object.
 
-### FieldNameParsers
+```@Key``` tells the **Parser*** what key to reference for a specific field. The key is defaulted to the name of the field.
 
-These allow the developer to specify a global field name "converter" to take in specific key/field name and return what the data conforms to.
+### Example
 
-### FieldParsible
-
-This is an interface that enables a parsed object to "listen" for when parsing occurs throughout each key/field, and optionally handle the field on its own terms.
-
-#### Example
+#### FieldParsible
 
 ```java
 
+@FieldParsible
 public class AppFeatureControl implements FieldParsible{
 
-    @Getter
-    private HashMap<String, AppLocalObject> localMap;
+    private String hidden;
 
     @Override
-    public boolean parseField(String inFieldName, Setter inSetter, Object inData) {
-        if(!inFieldName.equals("fileDownloadControl") && !inFieldName.equals("appUpdateControl")) {
-            if(localMap == null) {
-                localMap = new HashMap<String, AppLocalObject>();
-            }
-
-            localMap.put(inFieldName, ObjectParser.parseJsonObject(AppLocalObject.class, inData));
-            return true;
-        }
-        return false;
+    public void parse(Object dataInstance, Parser parser) {
+      hidden = parser.getValue(dataInstance, "name");      
     }
 }
 
 ```
 
-### Object Mergers
-
-Object mergers are classes that provide a nice way to merge a list of keys into some other form of data - separate from the JSON, XML, or other data types that we're parsing. The **Data** field is what the **ObjectMerger** contains and should store from the data coming back in ```merge(key,data)```. 
-
-#### Example
-
 ```java
 
-public class ObjectMergerDemo extends ObjectMerger<AppConfig> {
-
-    private static final String KEY_APP_FEATURE_CONTROL = "appFeatureControl";
-    private static final String KEY_FILE_DOWNLOAD_CONTROL = "fileDownloadControl";
-
-    public ObjectMergerDemo() {
-        setData(new AppConfig());
+@com.raizlabs.android.parser.core.ParseInterface
+public class JsonParser implements Parser<JSONObject, JSONArray> {
+    @Override
+    public Object getValue(JSONObject object, String key) {
+        return object.opt(key);
     }
 
     @Override
-    protected void buildKeys(ArrayList<String> keys) {
-        keys.add(KEY_APP_FEATURE_CONTROL);
-        keys.add(KEY_FILE_DOWNLOAD_CONTROL);
+    public Object parse(Class returnType, JSONObject object) {
+        return JSON.parse(this, returnType, object);
     }
 
     @Override
-    public void merge(String key, Object data) {
-        // We will probably do some parsing here to convert the data into the objects as well 
-        if (key.equals(KEY_APP_FEATURE_CONTROL)) {
-            getData().setAppFeatureControl(data);
-        } else if (key.equals(KEY_FILE_DOWNLOAD_CONTROL)) {
-            getData().setFileDownloadControl(data);
-        }
+    public void parse(Object objectToParse, JSONObject data) {
+        JSON.parse(this, objectToParse, data);
+    }
+
+    @Override
+    public List parseList(Class returnType, JSONArray inData) {
+        return JSON.parseList(returnType, ArrayList.class, inData);
+    }
+
+    @Override
+    public Object[] parseArray(Class returnType, JSONArray inData) {
+        return JSON.parseArray(returnType, inData);
+    }
+
+    @Override
+    public Map parseMap(Class clazzType, JSONObject jsonObject) {
+        return JSON.parseMap(clazzType, HashMap.class, jsonObject);
     }
 }
 

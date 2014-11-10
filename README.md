@@ -60,7 +60,50 @@ Parser supports a good amount of flexible features that make this library very p
 
 #### Parseable
 
+```java
 
+@Parseable
+public class ComplexClass implements FieldParseable {
+
+    @Key
+    String name;
+
+    @Key
+    long date;
+
+    @Key
+    double math;
+
+    @Key
+    int number;
+
+    @Key
+    boolean truth;
+
+    @Key
+    SimpleClass otherClass;
+
+    @Key
+    SimpleClass[] simpleClasses;
+
+    @Key
+    List<SimpleClass> simpleClassList;
+
+    @Key
+    Map<String, SimpleClass> simpleClassMap;
+
+    String hidden;
+
+    @Key
+    SimpleFieldParser simpleFieldParser;
+
+    @Override
+    public void parse(Object dataInstance, Parser parser) {
+        hidden = (String) parser.getValue(dataInstance, "hidden");
+    }
+}
+
+```
 
 #### FieldParsible
 

@@ -55,10 +55,25 @@ public class ParserHolder {
     public static <ReturnType> ReturnType parse(Class<ReturnType> returnTypeClass, Object object) {
         getManager();
         ReturnType returnType = null;
-        if(object != null) {
+        if (object != null) {
             returnType = (ReturnType) getParser(object.getClass()).parse(returnTypeClass, object);
         }
         return returnType;
+    }
+
+    /**
+     * Parses an existing instance of the class with the data passed in.
+     *
+     * @param returnType   The object that's required to use the {@link com.raizlabs.android.parser.core.Parseable} annotation
+     * @param object       The type of data to parse such as {@link org.json.JSONObject}
+     * @param <ReturnType>
+     */
+    @SuppressWarnings("unchecked")
+    public static <ReturnType> void parse(ReturnType returnType, Object object) {
+        getManager();
+        if (object != null) {
+            getParser(object.getClass()).parse(returnType, object);
+        }
     }
 
     /**
@@ -74,7 +89,7 @@ public class ParserHolder {
     public static <ReturnType> ReturnType[] parseArray(Class<ReturnType> returnTypeClass, Object arrayType) {
         getManager();
         ReturnType[] returnTypes = null;
-        if(arrayType != null) {
+        if (arrayType != null) {
             returnTypes = (ReturnType[]) getParser(arrayType.getClass()).parseArray(returnTypeClass, arrayType);
         }
         return returnTypes;
@@ -93,7 +108,7 @@ public class ParserHolder {
     public static <ReturnType> List<ReturnType> parseList(Class<ReturnType> returnTypeClass, Object listType) {
         getManager();
         List<ReturnType> returnTypes = null;
-        if(listType != null) {
+        if (listType != null) {
             returnTypes = (List<ReturnType>) getParser(listType.getClass()).parseList(returnTypeClass, listType);
         }
         return returnTypes;
@@ -113,7 +128,7 @@ public class ParserHolder {
     public static <KeyType, ValueType> Map<KeyType, ValueType> parseMap(Class<KeyType> keyTypeClass, Class<ValueType> valueTypeClass, Object object) {
         getManager();
         Map<KeyType, ValueType> map = null;
-        if(object != null) {
+        if (object != null) {
             map = (Map<KeyType, ValueType>) getParser(object.getClass()).parseMap(valueTypeClass, object);
         }
         return map;

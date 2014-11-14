@@ -45,11 +45,13 @@ Parser supports a good amount of flexible features that make this library very p
 
 ```@ParseInterface``` used in conjunction with ```Parser``` interface to define parsers for a type of data object.
 
-```@Key``` tells the **Parser*** what key to reference for a specific field. The key is defaulted to the name of the field.
+```@Key``` tells the **Parser*** what key to reference for a specific field. The key is defaulted to the name of the field. A ```defValue``` can be specified as a string to use if the value is missing from a parse. Custom objects can be instantiated too with as default value, however you need to use the fully-qualified class name of any custom class you use. The default for primitive types is there "false", "0", or "null" equivalent.
 
 ### Example
 
 #### Parseable
+
+All fields **must** be package private or public in order for the ```$ParseDefinition``` of the class to have access to the fields when parsing. Also required is the ```@Parseable``` annotation.
 
 ```java
 
@@ -115,13 +117,21 @@ public class AppFeatureControl implements FieldParsible{
 
 #### Json Parser Example
 
+Define a parser in your application by implementing the ```@ParseInterface``` annotation and  the ```Parser<ObjectType, ListType>``` interface. This will register your parser with those datatypes, so that when we call ```ParserHolder.parse()```,
+the ```ParserHolder``` knows how to handle the two types.
+
 ```java
 
 @com.raizlabs.android.parser.core.ParseInterface
 public class JsonParser implements Parser<JSONObject, JSONArray> {
     @Override
-    public Object getValue(JSONObject object, String key) {
-        return object.opt(key);
+    public Object getValue(JSONObject object, String key, Object defValue) {
+        Object value = object.opt(key);
+        if(value == null) { 
+          value = defValue;
+        }
+        
+        return value;
     }
 
     @Override

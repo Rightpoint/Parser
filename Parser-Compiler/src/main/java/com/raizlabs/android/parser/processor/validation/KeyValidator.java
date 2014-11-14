@@ -23,7 +23,7 @@ public class KeyValidator implements Validator<KeyDefinition> {
     }
 
     @Override
-    public boolean validate(KeyDefinition keyDefinition) {
+    public boolean validate(ParserManager parserManager, KeyDefinition keyDefinition) {
         if(isNull(keyDefinition.keyName, keyDefinition.variableTypeElement)) {
             manager.logError("Key was found null for %1s or variable type %1s is not currently supported.", keyDefinition.keyName, keyDefinition.element.asType().toString());
             return false;

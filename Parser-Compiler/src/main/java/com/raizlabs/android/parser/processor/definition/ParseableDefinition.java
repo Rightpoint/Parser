@@ -37,7 +37,7 @@ public class ParseableDefinition extends BaseDefinition {
         for (Element enclosedElement : elements) {
             if (enclosedElement.getAnnotation(Key.class) != null) {
                 KeyDefinition keyDefinition = new KeyDefinition(manager, (VariableElement) enclosedElement);
-                if (keyValidator.validate(keyDefinition)) {
+                if (keyValidator.validate(manager, keyDefinition)) {
                     keyDefinitions.add(keyDefinition);
                 }
             }

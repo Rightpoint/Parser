@@ -105,6 +105,8 @@ public class KeyDefinition implements Writer {
 
     boolean shouldCreateFieldParser = false;
 
+    String defaultValue;
+
     public KeyDefinition(ParserManager manager, VariableElement element) {
         this.element = element;
 
@@ -115,10 +117,12 @@ public class KeyDefinition implements Writer {
             keyName = variableName;
         }
 
+        defaultValue = key.defValue();
+
         TypeMirror typeMirror = element.asType();
 
         if (typeMirror.getKind().isPrimitive()) {
-            variableTypeElement = manager.getTypes().boxedClass((PrimitiveType) element.asType());
+            variableTypeElement = manager.getTypes().boxedClass((PrimitiveType) typeMirror);
             type = Type.NORMAL;
             isPrimitive = true;
         } else {
@@ -170,7 +174,8 @@ public class KeyDefinition implements Writer {
             }
         }
 
-        variableType = element.asType().toString();
+        variableType = typeMirror.toString();
+
         if (type.equals(Type.MAP)) {
             hasParser = true;
         } else {

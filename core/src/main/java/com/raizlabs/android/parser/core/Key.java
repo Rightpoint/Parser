@@ -16,5 +16,16 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface Key {
     String name() default "";
+
+    /**
+     * The default value of the object. This is a literal string that will be placed into the class so
+     * it can be anything. If using an object, make sure to use its fully qualified class name.
+     *
+     * <br />
+     * For any non primitive type it will set to null, while primitives will be corresponding "0" for int,
+     * "false" for boolean, etc.
+     * @return
+     */
+    String defValue() default "";
 }
 

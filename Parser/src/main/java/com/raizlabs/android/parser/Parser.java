@@ -14,11 +14,12 @@ public interface Parser<ObjectType, ListType> {
     /**
      * Use this method to specify how to retrieve the key from the object.
      *
-     * @param object The singular object to retrieve data from
-     * @param key    The key to look up a value for
+     * @param object   The singular object to retrieve data from
+     * @param key      The key to look up a value for
+     * @param defValue Used when the value is not in the parser's data source
      * @return
      */
-    public Object getValue(ObjectType object, String key);
+    public Object getValue(ObjectType object, String key, Object defValue);
 
     /**
      * Creates and returns an instance of the return type from the specified object. The returnType must be annotated

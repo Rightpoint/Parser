@@ -43,5 +43,5 @@ dependencies {
 }
 
 android.applicationVariants.all { variant ->
-    variant.javaCompile.dependsOn ':compiler:jar'
+    variant.javaCompile.dependsOn ':Parser-Compiler:jar'
 }

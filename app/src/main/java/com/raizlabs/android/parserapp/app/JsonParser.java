@@ -18,8 +18,12 @@ import java.util.Map;
 @com.raizlabs.android.parser.core.ParseInterface
 public class JsonParser implements Parser<JSONObject, JSONArray> {
     @Override
-    public Object getValue(JSONObject object, String key) {
-        return object.opt(key);
+    public Object getValue(JSONObject object, String key, Object defValue) {
+        Object value = object.opt(key);
+        if(value == null) {
+            value = defValue;
+        }
+        return value;
     }
 
     @Override

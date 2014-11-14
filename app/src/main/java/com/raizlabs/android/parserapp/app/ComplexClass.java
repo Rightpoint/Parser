@@ -22,7 +22,7 @@ public class ComplexClass implements FieldParseable {
     @Key
     long date;
 
-    @Key
+    @Key(defValue = "5.0d")
     double math;
 
     @Key

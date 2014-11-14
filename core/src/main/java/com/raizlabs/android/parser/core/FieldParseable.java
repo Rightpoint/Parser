@@ -7,7 +7,9 @@ import java.lang.annotation.Target;
 
 /**
  * Author: andrewgrosner
- * Description: Marks a field as subscribing to the parse events of a parent {@link com.raizlabs.android.parser.core.Parseable}.
+ * Description: Marks a field as subscribing to the parse events of a parent {@link com.raizlabs.android.parser.core.Parseable}. This
+ * is to be used in conjunction with the {@link com.raizlabs.android.parser.core.Key} annotation.
+ * Class that uses this annotation must implement the {@link com.raizlabs.android.parser.FieldParseable} interface.
  */
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.FIELD)

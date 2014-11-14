@@ -11,10 +11,7 @@ import com.squareup.javawriter.JavaWriter;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.TypeParameterElement;
 import javax.lang.model.element.VariableElement;
-import javax.lang.model.type.ArrayType;
-import javax.lang.model.type.DeclaredType;
-import javax.lang.model.type.PrimitiveType;
-import javax.lang.model.type.TypeMirror;
+import javax.lang.model.type.*;
 import java.io.IOException;
 import java.util.List;
 
@@ -125,7 +122,31 @@ public class KeyDefinition implements Writer {
             variableTypeElement = manager.getTypes().boxedClass((PrimitiveType) typeMirror);
             type = Type.NORMAL;
             isPrimitive = true;
+
+            if(defaultValue == null || defaultValue.isEmpty()) {
+                TypeKind typeKind = typeMirror.getKind();
+                if(typeKind.equals(TypeKind.LONG)) {
+                    defaultValue = "0l";
+                } else if(typeKind.equals(TypeKind.DOUBLE)) {
+                    defaultValue = "0d";
+                } else if(typeKind.equals(TypeKind.FLOAT)) {
+                    defaultValue = "0f";
+                } else if(typeKind.equals(TypeKind.BOOLEAN)) {
+                    defaultValue = "false";
+                } else if(typeKind.equals(TypeKind.SHORT)
+                        || typeKind.equals(TypeKind.BYTE)
+                        || typeKind.equals(TypeKind.INT)) {
+                    defaultValue = "0";
+                } else if(typeKind.equals(TypeKind.CHAR)) {
+                    defaultValue = "\'\'";
+                }
+            }
         } else {
+
+            if(defaultValue == null || defaultValue.isEmpty()) {
+                defaultValue = "null";
+            }
+
             if (typeMirror instanceof ArrayType) {
                 ArrayType arrayType = (ArrayType) typeMirror;
                 variableTypeElement = manager.getElements().getTypeElement(arrayType.getComponentType().toString());
@@ -187,7 +208,7 @@ public class KeyDefinition implements Writer {
     public void write(JavaWriter javaWriter) throws IOException {
 
         if(!shouldCreateFieldParser) {
-            String getValue = String.format("parse.getValue(instance,\"%1s\")", keyName);
+            String getValue = String.format("parse.getValue(instance,\"%1s\", %1s)", keyName, defaultValue);
             if (!hasParser) {
                 javaWriter.emitStatement("parseable.%1s = ((%1s) " + getValue + ")", variableName, variableType);
             } else {

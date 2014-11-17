@@ -15,18 +15,23 @@ import java.util.Map;
  */
 public class JSON {
 
-    public static Object parse(Parser parser, Class<?> returnType, JSONObject jsonObject) {
-        ObjectParser objectParser = ParserHolder.getParseable(returnType);
-        Object instance = objectParser.getInstance();
-        parse(parser, instance, jsonObject);
-        return instance;
+    public static Object getValue(JSONObject jsonObject, String key, Object defValue, boolean required) {
+        Object value = null;
+        if(jsonObject != null) {
+            value = jsonObject.opt(key);
+        }
+
+        if(value == null) {
+            if(required) {
+                throw new ParseException("Required Key: " + key + " was missing from "
+                        + (jsonObject != null ? jsonObject.toString() : " unspecified"));
+            }
+            value = defValue;
+        }
+
+        return value;
     }
 
-
-    public static void parse(Parser parser, Object instance, JSONObject jsonObject) {
-        ObjectParser objectParser = ParserHolder.getParseable(instance.getClass());
-        objectParser.parse(instance, jsonObject, parser);
-    }
 
     public static List parseList(Class<?> returnType, Class<? extends List> listClass, JSONArray inData) {
         List list = null;

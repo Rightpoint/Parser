@@ -27,5 +27,11 @@ public @interface Key {
      * @return
      */
     String defValue() default "";
+
+    /**
+     * Specifies the field is required and thus a ParseException will thrown.
+     * @return true if the field is required and parsing should fail.
+     */
+    boolean required() default false;
 }
 

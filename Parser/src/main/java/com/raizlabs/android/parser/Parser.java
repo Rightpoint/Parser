@@ -17,9 +17,10 @@ public interface Parser<ObjectType, ListType> {
      * @param object   The singular object to retrieve data from
      * @param key      The key to look up a value for
      * @param defValue Used when the value is not in the parser's data source
+     *                 @param required If true, the parser should throw an exception.
      * @return
      */
-    public Object getValue(ObjectType object, String key, Object defValue);
+    public Object getValue(ObjectType object, String key, Object defValue, boolean required);
 
     /**
      * Creates and returns an instance of the return type from the specified object. The returnType must be annotated

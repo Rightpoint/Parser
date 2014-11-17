@@ -104,6 +104,8 @@ public class KeyDefinition implements Writer {
 
     String defaultValue;
 
+    boolean required;
+
     public KeyDefinition(ParserManager manager, VariableElement element) {
         this.element = element;
 
@@ -113,6 +115,8 @@ public class KeyDefinition implements Writer {
         if (keyName == null || keyName.isEmpty()) {
             keyName = variableName;
         }
+
+        required = key.required();
 
         defaultValue = key.defValue();
 
@@ -208,7 +212,7 @@ public class KeyDefinition implements Writer {
     public void write(JavaWriter javaWriter) throws IOException {
 
         if(!shouldCreateFieldParser) {
-            String getValue = String.format("parse.getValue(instance,\"%1s\", %1s)", keyName, defaultValue);
+            String getValue = String.format("parse.getValue(instance,\"%1s\", %1s, %1s)", keyName, defaultValue, required ? "true" : "false");
             if (!hasParser) {
                 javaWriter.emitStatement("parseable.%1s = ((%1s) " + getValue + ")", variableName, variableType);
             } else {

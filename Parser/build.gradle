@@ -1,7 +1,10 @@
 apply plugin: 'com.android.library'
 apply plugin: 'android-apt'
 apply plugin: 'com.raizlabs.libraryplugin'
-apply plugin: 'com.raizlabs.artifactorypublisher'
+
+if(project.getTasks().findByPath("artifactoryPublish") != null) {
+    apply plugin: 'com.raizlabs.artifactorypublisher'
+}
 
 android {
     compileSdkVersion 21
@@ -26,8 +29,8 @@ android {
 }
 
 dependencies {
-    compile project(':core')
-    androidTestApt project(':Parser-Compiler')
+    compile project(parser_project_prefix + "core")
+    androidTestApt project(parser_project_prefix + "Parser-Compiler")
 }
 
 if(project.getTasks().findByPath("artifactoryPublish") != null) {

@@ -2,25 +2,30 @@ buildscript {
     repositories {
         mavenCentral()
         maven { url 'http://dl.bintray.com/jfrog/jfrog-jars' }
-        maven {
-            url "${artifactory_contextUrl}/android-dev"
-            credentials {
-                username = "${artifactory_user}"
-                password = "${artifactory_password}"
+        if(project.getTasks().findByPath("artifactoryPublish") != null) {
+            maven {
+                url "${artifactory_contextUrl}/android-dev"
+                credentials {
+                    username = "${artifactory_user}"
+                    password = "${artifactory_password}"
+                }
             }
         }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:0.13.+'
-        classpath 'com.raizlabs.android-modules:libraryplugin:1.0.12'
-        classpath 'com.raizlabs.android-modules:artifactorypublisher:1.0.0'
+        if(project.getTasks().findByPath("artifactoryPublish") != null) {
+            classpath 'com.raizlabs.android-modules:artifactorypublisher:1.0.0'
+        }
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:2.2.5"
     }
 }
 
 apply plugin: 'com.android.library'
-apply plugin: 'com.raizlabs.libraryplugin'
-apply plugin: 'com.raizlabs.artifactorypublisher'
+
+if(project.getTasks().findByPath("artifactoryPublish") != null) {
+    apply plugin: 'com.raizlabs.artifactorypublisher'
+}
 
 android {
     compileSdkVersion 21

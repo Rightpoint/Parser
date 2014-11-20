@@ -39,7 +39,8 @@ Parser supports a good amount of flexible features that make this library very p
 
 ### Annotations
 
-```@Parseable``` will generate a ```$ParseDefinition``` class used in parsing the object
+```@Parseable``` will generate a ```$ParseDefinition``` class used in parsing the object. To list to it's own Parse events,
+have the class implement ```FieldParseable```
 
 ```@FieldParseable``` marks a field as suscribing to the parse event data of parent ```@Parseable```. Must implement the ```FieldParsible``` interface. 
 
@@ -64,7 +65,7 @@ public class ComplexClass implements FieldParseable {
     @Key
     long date;
 
-    @Key(defValue = "0.5d")
+    @Key(defValue = "0.5d") // will use this as the default value when the $ParseDefinition is created
     double math;
 
     @Key
@@ -73,7 +74,7 @@ public class ComplexClass implements FieldParseable {
     @Key
     boolean truth;
 
-    @Key
+    @Key(required = true) // will throw a ParseException if not found
     SimpleClass otherClass;
 
     @Key

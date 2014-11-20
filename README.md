@@ -92,7 +92,7 @@ public class ComplexClass implements FieldParseable {
 
     @Override
     public void parse(Object dataInstance, Parser parser) {
-        hidden = (String) parser.getValue(dataInstance, "hidden", "");
+        hidden = (String) parser.getValue(dataInstance, "hidden", "", false);
     }
 }
 
@@ -102,14 +102,14 @@ public class ComplexClass implements FieldParseable {
 
 ```java
 
-@FieldParsible
-public class AppFeatureControl implements FieldParsible{
+@FieldParseable
+public class AppFeatureControl implements FieldParseable{
 
     private String hidden;
 
     @Override
     public void parse(Object dataInstance, Parser parser) {
-      hidden = parser.getValue(dataInstance, "name", "");      
+      hidden = parser.getValue(dataInstance, "name", "", false);      
     }
 }
 

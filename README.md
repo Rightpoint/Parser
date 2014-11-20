@@ -64,7 +64,7 @@ public class ComplexClass implements FieldParseable {
     @Key
     long date;
 
-    @Key
+    @Key(defValue = "0.5d")
     double math;
 
     @Key

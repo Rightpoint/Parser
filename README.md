@@ -1,6 +1,6 @@
 # Parser
 
-### Using annotation processing, the library provides a standard way to parse data into model objects. Use the standard ```JsonParser``` or create your own ```ParseInterface```!
+Using annotation processing, the library provides a standard way to parse data into model objects. Use the standard ```JsonParser``` or create your own ```ParseInterface```!
 
 ## Getting Started
 

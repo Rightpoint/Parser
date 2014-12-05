@@ -1,6 +1,6 @@
 # Parser
 
-## Provides a standard way to parse data into model objects.
+### Using annotation processing, the library provides a standard way to parse data into model objects. Use the standard ```JsonParser``` or create your own ```ParseInterface```!
 
 ## Getting Started
 
@@ -10,7 +10,8 @@
 ```groovy
 
   dependencies {
-    apt project(':Libraries:Parser-Compiler')
+    apt project(':Libraries:Parser:Parser-Compiler')
+    compile project(':Libraries:Parser:core')
     compile project(':Libraries:Parser:Parser')
   }
 

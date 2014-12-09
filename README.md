@@ -4,15 +4,26 @@ Using annotation processing, the library provides a standard way to parse data i
 
 ## Getting Started
 
+Add the maven repo url to your buildscript in the top-level build.gradle:
 
-### Using Standard Gradle
+```groovy
+
+buildscript {
+  repositories {
+    maven { url "https://raw.github.com/Raizlabs/maven-releases/master/" }
+  }
+}
+
+```
+
+Add the library to the project-level build.gradle:
 
 ```groovy
 
   dependencies {
-    apt project(':Libraries:Parser:Parser-Compiler')
-    compile project(':Libraries:Parser:core')
-    compile project(':Libraries:Parser:Parser')
+    apt 'com.raizlabs.android:Parser-Compiler:1.0.0'
+    compile 'com.raizlabs.android:Parser-Core:1.0.0'
+    compile 'com.raizlabs.android:Parser:1.0.0'
   }
 
 ```

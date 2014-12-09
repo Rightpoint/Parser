@@ -4,13 +4,11 @@ apply plugin: 'android-apt'
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "21.0.2"
+    buildToolsVersion "21.1.1"
 
     defaultConfig {
         minSdkVersion 3
         targetSdkVersion 21
-        versionName = version.replace("-SNAPSHOT", "")
-        versionCode = Integer.parseInt(versionName.replace(".", ""))
     }
 
     compileOptions {
@@ -24,6 +22,9 @@ android {
 }
 
 dependencies {
-    compile project(parser_project_prefix + "core")
+    compile project(parser_project_prefix + "Parser-Core")
     androidTestApt project(parser_project_prefix + "Parser-Compiler")
 }
+
+apply from: '../maven_push.gradle'
+apply from: '../android-artifacts.gradle'

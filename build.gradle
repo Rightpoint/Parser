@@ -32,7 +32,6 @@ android {
     buildToolsVersion "21.0.2"
 
     defaultConfig {
-        applicationId "com.raizlabs.android.parser"
         minSdkVersion 3
         targetSdkVersion 21
         versionName = version.replace("-SNAPSHOT", "")

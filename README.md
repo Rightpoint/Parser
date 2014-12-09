@@ -16,7 +16,7 @@ buildscript {
 
 ```
 
-Add the library to the project-level build.gradle:
+Add the library to the project-level build.gradle, using the [apt plugin](https://bitbucket.org/hvisser/android-apt):
 
 ```groovy
 

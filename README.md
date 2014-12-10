@@ -10,7 +10,7 @@ Add the maven repo url to your buildscript in the top-level build.gradle:
 
 buildscript {
   repositories {
-    maven { url "https://raw.github.com/Raizlabs/maven-releases/master/" }
+        maven { url "https://raw.github.com/Raizlabs/maven-releases/master/releases" }
   }
 }
 

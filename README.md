@@ -1,18 +1,18 @@
 # Parser
 
-Using annotation processing, the library provides a standard way to parse data into model objects. Use the standard ```JsonParser``` or create your own ```ParseInterface```!
+Parser is the fastest JSON-to-Model object parser that uses annotation processing to generate the parsing for you. It only uses reflection __one time__ and parsing is as fast as writing the code yourself. 
+
+The library enables you to swap and easily move between different JSON libraries or __any__ key-value object. Use the standard ```JsonParser``` or create your own ```ParseInterface```! 
 
 ## Getting Started
 
-Add the maven repo url to your buildscript in the top-level build.gradle:
+Add the maven repo url to your build.gradle:
 
 ```groovy
 
-buildscript {
   repositories {
         maven { url "https://raw.github.com/Raizlabs/maven-releases/master/releases" }
   }
-}
 
 ```
 

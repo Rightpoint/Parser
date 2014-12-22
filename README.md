@@ -32,16 +32,78 @@ Add the library to the project-level build.gradle, using the [apt plugin](https:
 
 ## Usage
 
+### Getting Started
 
-### Example
+Before creating any parse objects, you need to define a ```Parser```by adding the ```@ParseInterface``` annotation and implementing the ```Parser<ObjectType, ListType>``` interface. This will register your parser with those datatypes, so that when we call ```ParserHolder.parse()```, the ```ParserHolder``` knows how to handle the two types. You can create Parsers for other key-value data types, but they must **not** reference the same classes.
+
+```java
+
+@com.raizlabs.android.parser.core.ParseInterface
+public class JsonParser implements Parser<JSONObject, JSONArray> {
+    @Override
+    public Object getValue(JSONObject object, String key, Object defValue, boolean required) {
+        return JSON.getValue(object, key, defValue, required);
+    }
+
+    @Override
+    public Object parse(Class returnType, JSONObject object) {
+        return ParserUtils.parse(this, returnType, object);
+    }
+
+    @Override
+    public void parse(Object objectToParse, JSONObject data) {
+        ParserUtils.parse(this, objectToParse, data);
+    }
+
+    @Override
+    public List parseList(Class returnType, JSONArray inData) {
+        return JSON.parseList(returnType, ArrayList.class, inData);
+    }
+
+    @Override
+    public Object[] parseArray(Class returnType, JSONArray inData) {
+        return JSON.parseArray(returnType, inData);
+    }
+
+    @Override
+    public Map parseMap(Class clazzType, JSONObject jsonObject) {
+        return JSON.parseMap(clazzType, HashMap.class, jsonObject);
+    }
+}
+
+```
+
+### Define a Parseable Class
+
+In order to register a class to generate its ```$ParseDefinition``` you need:
+  1. Add the ```@Parseable``` annotation.
+  2. At least 1 ```@Key``` field.
+  3. Have a default constructor available so when nested, we can reference the default constructor. 
+  4. All fields **must** be package private or public in order for the ```$ParseDefinition``` of the class to have access to the fields when parsing.
+
+
+```java
+
+@Parseable
+public class MyParseable {
+
+
+  @Key
+  String myField;
+}
+
+
+```
+
+### How To Parse
 
 ```java
 
 public void someMethod(JSONObject json) {
-  MyModelObject parsedObject = ParserHolder.parse(MyModelObject.class, json);
+  MyParseable parsedObject = ParserHolder.parse(MyParseable.class, json);
 
   // or precreated
-  MyModelObject modelObject = new MyModelObject();
+  MyParseable modelObject = new MyParseable();
   ParserHolder.parse(modelObject, json);
 }
 
@@ -62,11 +124,19 @@ have the class implement ```FieldParseable```
 
 ```@Key``` tells the **Parser*** what key to reference for a specific field. The key is defaulted to the name of the field. A ```defValue``` can be specified as a string to use if the value is missing from a parse. Custom objects can be instantiated too with as default value, however you need to use the fully-qualified class name of any custom class you use. The default for primitive types is there "false", "0", or "null" equivalent.
 
-### Example
+### Supported Types
+
+List:  must be ```List<T>```. The ```Parser``` can pick what kind of list to use for the specified field.
+Map: must be ```Map<String, Value>```. The ```Parser``` can pick what kind of map to use.
+Array: class equivalent of primitives or ```@Parseable```
+Primitives: These will be boxed up to the corresponding classes before returning to its primitive type.
+String
+Any ```@Parseable``` class in single, list, and map (as a value) form. 
+
+
+### Complex Sample
 
 #### Parseable
-
-All fields **must** be package private or public in order for the ```$ParseDefinition``` of the class to have access to the fields when parsing. Also required is the ```@Parseable``` annotation.
 
 ```java
 
@@ -124,50 +194,9 @@ public class AppFeatureControl implements FieldParseable{
 
     @Override
     public void parse(Object dataInstance, Parser parser) {
-      hidden = parser.getValue(dataInstance, "name", "", false);      
+      hidden = (String) parser.getValue(dataInstance, "name", "", false);      
     }
 }
 
 ```
 
-#### Json Parser Example
-
-Define a parser in your application by implementing the ```@ParseInterface``` annotation and  the ```Parser<ObjectType, ListType>``` interface. This will register your parser with those datatypes, so that when we call ```ParserHolder.parse()```,
-the ```ParserHolder``` knows how to handle the two types.
-
-```java
-
-@com.raizlabs.android.parser.core.ParseInterface
-public class JsonParser implements Parser<JSONObject, JSONArray> {
-    @Override
-    public Object getValue(JSONObject object, String key, Object defValue, boolean required) {
-        return JSON.getValue(object, key, defValue, required);
-    }
-
-    @Override
-    public Object parse(Class returnType, JSONObject object) {
-        return ParserUtils.parse(this, returnType, object);
-    }
-
-    @Override
-    public void parse(Object objectToParse, JSONObject data) {
-        ParserUtils.parse(this, objectToParse, data);
-    }
-
-    @Override
-    public List parseList(Class returnType, JSONArray inData) {
-        return JSON.parseList(returnType, ArrayList.class, inData);
-    }
-
-    @Override
-    public Object[] parseArray(Class returnType, JSONArray inData) {
-        return JSON.parseArray(returnType, inData);
-    }
-
-    @Override
-    public Map parseMap(Class clazzType, JSONObject jsonObject) {
-        return JSON.parseMap(clazzType, HashMap.class, jsonObject);
-    }
-}
-
-```

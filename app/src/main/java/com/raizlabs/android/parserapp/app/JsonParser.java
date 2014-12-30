@@ -11,7 +11,6 @@ import java.util.List;
 
 /**
  * Author: andrewgrosner
- * Contributors: { }
  * Description:
  */
 @com.raizlabs.android.parser.core.ParseInterface
@@ -23,8 +22,8 @@ public class JsonParser extends BaseParser<JSONObject, JSONArray> {
     }
 
     @Override
-    public JSONObject getObject(JSONArray jsonArray, int index) {
-        return JSON.get(jsonArray, index);
+    public <ReturnType> ReturnType getObject(Class<ReturnType> returnType, JSONArray jsonArray, int index) {
+        return JSON.get(returnType, jsonArray, index);
     }
 
     @Override

@@ -204,7 +204,7 @@ public class KeyDefinition implements Writer {
         if (type.equals(Type.MAP)) {
             hasParser = true;
         } else {
-            hasParser = type.needsComponent() ? componentTypeElement.getAnnotation(Parseable.class) != null : variableTypeElement.getAnnotation(Parseable.class) != null;
+            hasParser = type.needsComponent() || variableTypeElement.getAnnotation(Parseable.class) != null;
         }
     }
 

@@ -16,11 +16,11 @@ public interface ObjectParser<ParseableClass> {
     /**
      * Will set all of the fields for the {@link ParseableClass} that define a {@link com.raizlabs.android.parser.core.Key} attribute.
      *
-     * @param parsible     The instance that we are parsing
+     * @param parseable     The instance that we are parsing
      * @param dataInstance The singular data type that we're parsing. E.g. {@link org.json.JSONObject}
      * @param parser       The parser we're using to parse the dataInstance into the parsible
      */
-    public void parse(ParseableClass parsible, Object dataInstance, Parser parser);
+    public void parse(ParseableClass parseable, Object dataInstance, Parser parser);
 
 
 }

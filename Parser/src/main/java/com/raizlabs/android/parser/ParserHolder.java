@@ -62,6 +62,23 @@ public class ParserHolder {
     }
 
     /**
+     * Parses data safely by checking to see if the data has a parser. If not, nothing will happen.
+     * @param object
+     * @param <ReturnType>
+     * @return
+     */
+    static <ReturnType> ReturnType parseSafe(Class<ReturnType> returnTypeClass, Object object) {
+        ReturnType retObject = null;
+        if(ParserHolder.hasParser(object.getClass())) {
+            retObject = (ReturnType) ParserHolder.parse(returnTypeClass, object);
+        } else {
+            retObject = (ReturnType) object;
+        }
+
+        return retObject;
+    }
+
+    /**
      * Parses an existing instance of the class with the data passed in.
      *
      * @param returnType   The object that's required to use the {@link com.raizlabs.android.parser.core.Parseable} annotation
@@ -179,5 +196,9 @@ public class ParserHolder {
      */
     static void addParseInterface(Class<?> clazz, Parser parser) {
         mParseMap.put(clazz, parser);
+    }
+
+    public static boolean hasParser(Class<?> clazz) {
+        return mParseMap.containsKey(clazz);
     }
 }

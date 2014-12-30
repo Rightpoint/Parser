@@ -48,7 +48,7 @@ public class ParserDelegateTest extends AndroidTestCase {
         ParserUtils.processList(jsonArray, new ParserUtils.ListKeyDelegate() {
             @Override
             public void execute(Object objectToRunOver, Parser parser, int index) {
-                Object jsonObject = parser.getObject(objectToRunOver, index);
+                Object jsonObject = parser.getObject(JSONObject.class, objectToRunOver, index);
                 assertNotNull(jsonObject);
 
                 String name = (String) parser.getValue(jsonObject, "name", "", true);

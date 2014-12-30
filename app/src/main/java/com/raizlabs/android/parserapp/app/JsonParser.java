@@ -2,17 +2,12 @@ package com.raizlabs.android.parserapp.app;
 
 
 import com.raizlabs.android.parser.BaseParser;
-import com.raizlabs.android.parser.Parser;
 import com.raizlabs.android.parser.JSON;
-import com.raizlabs.android.parser.ParserUtils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Author: andrewgrosner
@@ -29,7 +24,7 @@ public class JsonParser extends BaseParser<JSONObject, JSONArray> {
 
     @Override
     public JSONObject getObject(JSONArray jsonArray, int index) {
-        return JSON.getJSONObject(jsonArray, index);
+        return JSON.get(jsonArray, index);
     }
 
     @Override

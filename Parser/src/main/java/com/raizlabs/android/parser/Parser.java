@@ -28,7 +28,7 @@ public interface Parser<ObjectType, ListType> {
      * @param index    The index to retrieve it from
      * @return The object that was found.
      */
-    public ObjectType getObject(ListType listType, int index);
+    public <ReturnType> ReturnType getObject(Class<ReturnType> returnType, ListType listType, int index);
 
     /**
      * Creates and returns an instance of the return type from the specified object. The returnType must be annotated

@@ -46,6 +46,9 @@ public class ComplexClass implements ParseListener {
     String hidden;
 
     @Key
+    List<String> stringList;
+
+    @Key
     @com.raizlabs.android.parser.core.FieldParseable(shouldCreateClass = true)
     SimpleFieldParser simpleFieldParser;
 

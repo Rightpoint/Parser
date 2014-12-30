@@ -35,15 +35,26 @@ public class JSON {
     }
 
 
-    public static JSONObject getJSONObject(JSONArray jsonArray, int index) {
+    @SuppressWarnings("unchecked")
+    public static <ReturnType> ReturnType get(Class<ReturnType> returnType, JSONArray jsonArray, int index) {
         if(jsonArray == null) {
             throw new ParseException("JSONArray was null");
         }
-        try {
-            return jsonArray.getJSONObject(index);
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
+        Object value;
+        if(returnType.equals(Boolean.class) || returnType.equals(boolean.class)) {
+            value = jsonArray.optBoolean(index);
+        } else if(returnType.equals(String.class)) {
+            value = jsonArray.optString(index);
+        } else if(returnType.equals(Long.class) || returnType.equals(long.class)) {
+            value = jsonArray.optLong(index);
+        } else if(returnType.equals(Integer.class) || returnType.equals(int.class)){
+            value = jsonArray.optInt(index);
+        } else if(returnType.equals(Double.class) || returnType.equals(double.class)) {
+            value = jsonArray.optDouble(index);
+        } else {
+            value = jsonArray.opt(index);
         }
+        return (ReturnType) value;
     }
 
     public static int count(JSONArray jsonArray) {

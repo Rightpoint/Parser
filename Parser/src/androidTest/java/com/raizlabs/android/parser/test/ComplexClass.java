@@ -1,6 +1,6 @@
 package com.raizlabs.android.parser.test;
 
-import com.raizlabs.android.parser.FieldParseable;
+import com.raizlabs.android.parser.ParseListener;
 import com.raizlabs.android.parser.Parser;
 import com.raizlabs.android.parser.core.Key;
 import com.raizlabs.android.parser.core.Parseable;
@@ -14,7 +14,7 @@ import java.util.Map;
  * Description:
  */
 @Parseable
-public class ComplexClass implements FieldParseable {
+public class ComplexClass implements ParseListener {
 
     @Key
     String name;

@@ -9,7 +9,7 @@ public interface FieldParseable {
 
     /**
      * Called when the top-level object is parsed. The data passed in should not be accessed directly.
-     * Instead use {@link com.raizlabs.android.parser.Parser#getValue(Object, String)} on the object to get the data. If you know the
+     * Instead use {@link com.raizlabs.android.parser.Parser#getValue(Object, String, Object, boolean)})} on the object to get the data. If you know the
      * data will be of another instance of the dataInstance, use the {@link com.raizlabs.android.parser.ParserHolder}'s methods for specific types.
      *
      * @param dataInstance The data that is getting parsed.

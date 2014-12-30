@@ -43,6 +43,7 @@ Add the library to the project-level build.gradle, using the [apt plugin](https:
   3. Deprecated ```FieldParseable``` to the better-named ```ParseListener```. 
   4. Fixed broken tests and sample app
   5. Added a ```BaseParser``` to eliminate need for implementing most of the methods manually.
+  6. Removed restriction on ```Parseable``` classes for having one ```@Key``` field if they implement ```ParseListener```
 
 ## Usage
 
@@ -81,7 +82,7 @@ public class JsonParser extends BaseParser<JSONObject, JSONArray> {
 
 In order to register a class to generate its ```$ParseDefinition``` you need:
   1. Add the ```@Parseable``` annotation.
-  2. At least 1 ```@Key``` field.
+  2. At least 1 ```@Key``` field or implement ```ParseListener```.
   3. Have a default constructor available so when nested, we can reference the default constructor. 
   4. All fields **must** be package private or public in order for the ```$ParseDefinition``` of the class to have access to the fields when parsing.
 

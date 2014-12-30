@@ -1,11 +1,11 @@
 [![Android Weekly](http://img.shields.io/badge/Android%20Weekly-%23133-2CB3E5.svg?style=flat)](http://androidweekly.net/issues/issue-133)
-[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Parser-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1255) [![Raizlabs Repository](http://img.shields.io/badge/Raizlabs%20Repository-1.0.0-blue.svg?style=flat)](https://github.com/Raizlabs/maven-releases)
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Parser-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1255) [![Raizlabs Repository](http://img.shields.io/badge/Raizlabs%20Repository-1.1.0-blue.svg?style=flat)](https://github.com/Raizlabs/maven-releases)
 
 # Parser
 
-Parser is the fastest JSON-to-Model object parser that uses annotation processing to generate the parsing for you. It only uses reflection __one time__ and parsing is as fast as writing the code yourself. 
+Parser is the fastest Key-Value-to-Model object parser that uses annotation processing to generate the parsing for you. It only uses reflection __one time__ and parsing is as fast as writing the code yourself. 
 
-The library enables you to swap and easily move between different JSON libraries or __any__ key-value object. Use the standard ```JsonParser``` or create your own ```ParseInterface```! 
+The library enables you to swap and easily move between different JSON libraries or __any__ key-value object. Create the standard ```JsonParser``` or create your own ```ParseInterface```. 
 
 ## Getting Started
 
@@ -25,15 +25,25 @@ Add the library to the project-level build.gradle, using the [apt plugin](https:
 ```groovy
 
   dependencies {
-    apt 'com.raizlabs.android:Parser-Compiler:1.0.0'
-    aarLinkSources 'com.raizlabs.android:Parser-Compiler:1.0.0:sources@jar'
-    compile 'com.raizlabs.android:Parser-Core:1.0.0'
-    aarLinkSources 'com.raizlabs.android:Parser-Core:1.0.0:sources@jar'
-    compile 'com.raizlabs.android:Parser:1.0.0'
-    aarLinkSources 'com.raizlabs.android:Parser:1.0.0:sources@jar'
+    apt 'com.raizlabs.android:Parser-Compiler:1.1.0'
+    aarLinkSources 'com.raizlabs.android:Parser-Compiler:1.1.0:sources@jar'
+    compile 'com.raizlabs.android:Parser-Core:1.1.0'
+    aarLinkSources 'com.raizlabs.android:Parser-Core:1.1.0:sources@jar'
+    compile 'com.raizlabs.android:Parser:1.1.0'
+    aarLinkSources 'com.raizlabs.android:Parser:1.1.0:sources@jar'
   }
 
 ```
+
+## Changelog
+
+### 1.1.0
+  1. Changed the ```Parser``` interface by adding ```keys()```, ```count()```, and ```getObject()```. These three methods now enable iteration of data in ```ParserUtils``` and simplify some of the implementation from now on.
+  2. Support for non-```Parseable``` objects in ```List``` and arrays. It will be up to the parser to return the correct values. Reference ```JSON.get()``` for an example. 
+  3. Deprecated ```FieldParseable``` to the better-named ```ParseListener```. 
+  4. Fixed broken tests and sample app
+  5. Added a ```BaseParser``` to eliminate need for implementing most of the methods manually.
+  6. Removed restriction on ```Parseable``` classes for having one ```@Key``` field if they implement ```ParseListener```
 
 ## Usage
 
@@ -44,35 +54,25 @@ Before creating any parse objects, you need to define a ```Parser```by adding th
 ```java
 
 @com.raizlabs.android.parser.core.ParseInterface
-public class JsonParser implements Parser<JSONObject, JSONArray> {
+public class JsonParser extends BaseParser<JSONObject, JSONArray> {
     @Override
     public Object getValue(JSONObject object, String key, Object defValue, boolean required) {
         return JSON.getValue(object, key, defValue, required);
     }
 
     @Override
-    public Object parse(Class returnType, JSONObject object) {
-        return ParserUtils.parse(this, returnType, object);
+    public <ReturnType> ReturnType getObject(Class<ReturnType> returnType, JSONArray jsonArray, int index) {
+        return JSON.get(returnType, jsonArray, index);
     }
 
     @Override
-    public void parse(Object objectToParse, JSONObject data) {
-        ParserUtils.parse(this, objectToParse, data);
+    public List<String> keys(JSONObject jsonObject) {
+        return JSON.keys(jsonObject);
     }
 
     @Override
-    public List parseList(Class returnType, JSONArray inData) {
-        return JSON.parseList(returnType, ArrayList.class, inData);
-    }
-
-    @Override
-    public Object[] parseArray(Class returnType, JSONArray inData) {
-        return JSON.parseArray(returnType, inData);
-    }
-
-    @Override
-    public Map parseMap(Class clazzType, JSONObject jsonObject) {
-        return JSON.parseMap(clazzType, HashMap.class, jsonObject);
+    public int count(JSONArray jsonArray) {
+        return JSON.count(jsonArray);
     }
 }
 
@@ -82,7 +82,7 @@ public class JsonParser implements Parser<JSONObject, JSONArray> {
 
 In order to register a class to generate its ```$ParseDefinition``` you need:
   1. Add the ```@Parseable``` annotation.
-  2. At least 1 ```@Key``` field.
+  2. At least 1 ```@Key``` field or implement ```ParseListener```.
   3. Have a default constructor available so when nested, we can reference the default constructor. 
   4. All fields **must** be package private or public in order for the ```$ParseDefinition``` of the class to have access to the fields when parsing.
 
@@ -146,7 +146,7 @@ Any ```@Parseable``` class in single, list, and map (as a value) form.
 ```java
 
 @Parseable
-public class ComplexClass implements FieldParseable {
+public class ComplexClass implements ParseListener {
 
     @Key
     String name;
@@ -193,7 +193,7 @@ public class ComplexClass implements FieldParseable {
 ```java
 
 @FieldParseable
-public class AppFeatureControl implements FieldParseable{
+public class AppFeatureControl implements ParseListener {
 
     private String hidden;
 

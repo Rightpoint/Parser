@@ -13,8 +13,10 @@ public class ParseableValidator implements Validator<ParseableDefinition> {
     @Override
     public boolean validate(ParserManager manager, ParseableDefinition parseableDefinition) {
         boolean success = true;
-        if(parseableDefinition.keyDefinitions.isEmpty()) {
-            manager.logError("The parseable class %1s must have at least one valid field with the Key annotation.", parseableDefinition.elementClassName);
+
+        if(parseableDefinition.keyDefinitions.isEmpty() && !parseableDefinition.isFieldParser) {
+            manager.logError("The parseable class %1s must have at least one valid field with the Key annotation " +
+                    "or implement the FieldParser interface.", parseableDefinition.elementClassName);
             success = false;
         }
         return success;

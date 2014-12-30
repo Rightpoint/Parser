@@ -5,7 +5,7 @@
 
 Parser is the fastest Key-Value-to-Model object parser that uses annotation processing to generate the parsing for you. It only uses reflection __one time__ and parsing is as fast as writing the code yourself. 
 
-The library enables you to swap and easily move between different JSON libraries or __any__ key-value object. Create the standard ```JsonParser``` or create your own ```ParseInterface```. 
+The library enables you to swap and easily move between different JSON libraries or __any__ key-value object. Extend the standard ```JsonParser``` or create your own ```@ParseInterface```/```Parser```. 
 
 ## Getting Started
 
@@ -44,6 +44,7 @@ Add the library to the project-level build.gradle, using the [apt plugin](https:
   4. Fixed broken tests and sample app
   5. Added a ```BaseParser``` to eliminate need for implementing most of the methods manually.
   6. Removed restriction on ```Parseable``` classes for having one ```@Key``` field if they implement ```ParseListener```
+  7. Now can subclass other ```Parser```, which means easy inclusion into your project by extending ```JsonParser``` instead of needing to implement the ```Parser``` interface!
 
 ## Usage
 

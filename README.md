@@ -49,31 +49,16 @@ Add the library to the project-level build.gradle, using the [apt plugin](https:
 
 ### Getting Started
 
-Before creating any parse objects, you need to define a ```Parser```by adding the ```@ParseInterface``` annotation and implementing the ```Parser<ObjectType, ListType>``` interface. This will register your parser with those datatypes, so that when we call ```ParserHolder.parse()```, the ```ParserHolder``` knows how to handle the two types. You can create Parsers for other key-value data types, but they must **not** reference the same classes.
+Before creating any parse objects, you need to define a ```Parser```by adding the ```@ParseInterface``` annotation and implementing the ```Parser<ObjectType, ListType>``` interface. 
+
+To make things simpler, all you need to do is to extend the ```JsonParser``` class included in the library and add the ```@ParseInterface``` annotation.
+
+This will register your parser with those datatypes, so that when we call ```ParserHolder.parse()```, the ```ParserHolder``` knows how to handle the two types. You can create Parsers for other key-value data types, but they must **not** reference the same classes.
 
 ```java
 
 @com.raizlabs.android.parser.core.ParseInterface
-public class JsonParser extends BaseParser<JSONObject, JSONArray> {
-    @Override
-    public Object getValue(JSONObject object, String key, Object defValue, boolean required) {
-        return JSON.getValue(object, key, defValue, required);
-    }
-
-    @Override
-    public <ReturnType> ReturnType getObject(Class<ReturnType> returnType, JSONArray jsonArray, int index) {
-        return JSON.get(returnType, jsonArray, index);
-    }
-
-    @Override
-    public List<String> keys(JSONObject jsonObject) {
-        return JSON.keys(jsonObject);
-    }
-
-    @Override
-    public int count(JSONArray jsonArray) {
-        return JSON.count(jsonArray);
-    }
+public class JsonParser extends com.raizlabs.android.JsonParser {
 }
 
 ```
@@ -127,21 +112,25 @@ have the class implement ```FieldParseable```
 
 ```@ParseInterface``` used in conjunction with ```Parser``` interface to define parsers for a type of data object.
 
-```@Key``` tells the **Parser*** what key to reference for a specific field. The key is defaulted to the name of the field. A ```defValue``` can be specified as a string to use if the value is missing from a parse. Custom objects can be instantiated too with as default value, however you need to use the fully-qualified class name of any custom class you use. The default for primitive types is there "false", "0", or "null" equivalent.
+```@Key``` tells the **Parser*** what key to reference for a specific field. The key is defaulted to the name of the field. A ```defValue``` can be specified as a string to use if the value is missing from a parse. Custom objects can be instantiated too with as default value, however you need to use the fully-qualified class name of any custom class you use. The default for primitive types is there "false", "0", or "null" equivalent. ```required``` if true, will throw a ```ParseException``` when not found. 
 
 ### Supported Types
 
-List:  must be ```List<T>```. The ```Parser``` can pick what kind of list to use for the specified field.
-Map: must be ```Map<String, Value>```. The ```Parser``` can pick what kind of map to use.
-Array: class equivalent of primitives or ```@Parseable```
-Primitives: These will be boxed up to the corresponding classes before returning to its primitive type.
-String
-Any ```@Parseable``` class in single, list, and map (as a value) form. 
+  1. All datatypes supported by the ```JSONObject``` class when using the ```JsonParser```
+  2. Lists using ```List<T>```. Default will be ```ArrayList```
+  3. Maps defined as ```Map<String, Value>```. The default is ```HashMap```.
+  4. Array of any supported type
+  5. Primitives will be boxed up to the corresponding classes before returning to its primitive type.
+  6. Custom ```ParseListener``` classes declared as ```@FieldParseable```
+  7. Strings
+  8. Any ```@Parseable``` class in single, list, and map (as a value) form. 
 
 
 ### Complex Sample
 
 #### Parseable
+
+Here is an example showing the various supported field types and how they are declared.
 
 ```java
 
@@ -179,6 +168,9 @@ public class ComplexClass implements ParseListener {
 
     @Key
     SimpleFieldParser simpleFieldParser;
+    
+    @Key
+    List<String> lists;
 
     @Override
     public void parse(Object dataInstance, Parser parser) {
@@ -188,11 +180,13 @@ public class ComplexClass implements ParseListener {
 
 ```
 
-#### FieldParsible
+#### ParseListener
+
+Making a class that implements ```ParseListener``` enables it to suscribe to parse events. You can retrieve values from the parser this way and do something custom. This is called at the **end** of parsing--i.e. after all other fields are parsed.
 
 ```java
 
-@FieldParseable
+@Parseable
 public class AppFeatureControl implements ParseListener {
 
     private String hidden;

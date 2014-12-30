@@ -42,6 +42,7 @@ public class ParserTest extends AndroidTestCase {
             stringList.put("Is");
             stringList.put("A");
             stringList.put("Test");
+            jsonObject.put("stringArray", stringList);
 
             JSONObject mapTest = new JSONObject();
             mapTest.put("This", simpleClass);
@@ -83,5 +84,6 @@ public class ParserTest extends AndroidTestCase {
         assertEquals(complexClass.number, 5);
         assertEquals(complexClass.simpleFieldParser.hidden, "Hidden Here");
         assertNotNull(complexClass.stringList);
+        assertNotNull(complexClass.stringArray);
     }
 }

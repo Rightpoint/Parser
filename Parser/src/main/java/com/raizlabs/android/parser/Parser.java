@@ -55,7 +55,7 @@ public interface Parser<ObjectType, ListType> {
      * @param inData     The list data we're parsing
      * @return
      */
-    public List parseList(Class<ObjectType> returnType, ListType inData);
+    public List parseList(Class returnType, ListType inData);
 
     /**
      * Creates and returns an array of parseable objects with the specified {@link ListType}
@@ -64,7 +64,7 @@ public interface Parser<ObjectType, ListType> {
      * @param inData     The list data we're parsing
      * @return
      */
-    public ObjectType[] parseArray(Class<ObjectType> returnType, ListType inData);
+    public Object[] parseArray(Class returnType, ListType inData);
 
     /**
      * Creates and returns a {@link java.util.Map} of a String-to-Parseable using the singular {@link ObjectType}.
@@ -74,7 +74,7 @@ public interface Parser<ObjectType, ListType> {
      * @param objectType The object to parse data from
      * @return
      */
-    public Map<String, ObjectType> parseMap(Class<ObjectType> clazzType, ObjectType objectType);
+    public Map parseMap(Class clazzType, ObjectType objectType);
 
     /**
      * @return A way to retrieve a list of keys from the object

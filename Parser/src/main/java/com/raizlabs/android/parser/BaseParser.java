@@ -21,17 +21,17 @@ public abstract class BaseParser<ObjectType, ListType> implements Parser<ObjectT
     }
 
     @Override
-    public List<ObjectType> parseList(Class<ObjectType> returnType, ListType inData) {
+    public List parseList(Class returnType, ListType inData) {
         return ParserUtils.parseList(this, returnType, ArrayList.class, inData);
     }
 
     @Override
-    public ObjectType[] parseArray(Class<ObjectType> returnType, ListType inData) {
+    public Object[] parseArray(Class returnType, ListType inData) {
         return ParserUtils.parseArray(this, returnType, inData);
     }
 
     @Override
-    public Map<String, ObjectType> parseMap(Class<ObjectType> clazzType, ObjectType objectType) {
+    public Map parseMap(Class clazzType, ObjectType objectType) {
         return ParserUtils.parseMap(this, clazzType, HashMap.class, objectType);
     }
 }

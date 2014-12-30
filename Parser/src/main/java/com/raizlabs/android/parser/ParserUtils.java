@@ -1,6 +1,11 @@
 package com.raizlabs.android.parser;
 
+import org.json.JSONObject;
+
+import java.lang.reflect.Array;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Author: andrewgrosner
@@ -98,5 +103,73 @@ public class ParserUtils {
                 processList(listObjectToRunOver, listKeyDelegate);
             }
         }
+    }
+
+    /**
+     * Parses a listObject into a list of {@link ObjectType}
+     *
+     * @param parser          The parser to use
+     * @param returnType      The {@link ObjectType} class
+     * @param listClass       The list class to create
+     * @param listObjectToUse The list type used in a Parser
+     * @param <ObjectType>
+     * @return A list of {@link ObjectType}
+     */
+    @SuppressWarnings("unchecked")
+    public static <ObjectType, ListType> List<ObjectType> parseList(Parser<ObjectType, ListType> parser,
+                                                          Class<ObjectType> returnType, Class<? extends List> listClass,
+                                                          ListType listObjectToUse) {
+        List<ObjectType> list = null;
+        try {
+            list = listClass.newInstance();
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+        int count = parser.count(listObjectToUse);
+        for (int i = 0; i < count; i++) {
+            list.add(ParserHolder.parse(returnType, parser.getObject(listObjectToUse, i)));
+        }
+
+        return list;
+    }
+
+    /**
+     * Parses a ListObject into an Array of {@link ObjectType}
+     *
+     * @param parser          The parser to use
+     * @param returnType      The return type
+     * @param listObjectToUse The list type used in a Parser
+     * @param <ObjectType>
+     * @return An array of {@link ObjectType}
+     */
+    @SuppressWarnings("unchecked")
+    public static <ObjectType, ListType> ObjectType[] parseArray(Parser<ObjectType, ListType> parser,
+                                                       Class<ObjectType> returnType, ListType listObjectToUse) {
+
+        int count = parser.count(listObjectToUse);
+        ObjectType[] array = (ObjectType[]) Array.newInstance(returnType, count);
+
+        for (int i = 0; i < count; i++) {
+            array[i] = ParserHolder.parse(returnType, parser.getObject(listObjectToUse, i));
+        }
+        return array;
+    }
+
+    public static <ObjectType> Map<String, ObjectType> parseMap(Parser<ObjectType, ?> parser, Class<ObjectType> clazzType,
+                                            Class<? extends Map> mapClass, ObjectType objectToParse) {
+        Map<String, ObjectType> map = null;
+
+        try {
+            map = mapClass.newInstance();
+        } catch (Throwable e) {
+        }
+
+        if(map != null) {
+            List<String> keys = parser.keys(objectToParse);
+            for(String key: keys) {
+                map.put(key, ParserHolder.parse(clazzType, parser.getValue(objectToParse, key, null, true)));
+            }
+        }
+        return map;
     }
 }

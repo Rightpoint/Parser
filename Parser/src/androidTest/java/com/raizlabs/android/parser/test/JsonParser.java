@@ -31,21 +31,6 @@ public class JsonParser extends BaseParser<JSONObject, JSONArray> {
     }
 
     @Override
-    public List parseList(Class returnType, JSONArray inData) {
-        return JSON.parseList(returnType, ArrayList.class, inData);
-    }
-
-    @Override
-    public Object[] parseArray(Class returnType, JSONArray inData) {
-        return JSON.parseArray(returnType, inData);
-    }
-
-    @Override
-    public Map parseMap(Class clazzType, JSONObject jsonObject) {
-        return JSON.parseMap(clazzType, HashMap.class, jsonObject);
-    }
-
-    @Override
     public List<String> keys(JSONObject jsonObject) {
         return JSON.keys(jsonObject);
     }

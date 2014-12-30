@@ -1,6 +1,6 @@
 package com.raizlabs.android.parser.test;
 
-import com.raizlabs.android.parser.FieldParseable;
+import com.raizlabs.android.parser.ParseListener;
 import com.raizlabs.android.parser.Parser;
 import com.raizlabs.android.parser.core.Key;
 import com.raizlabs.android.parser.core.Parseable;
@@ -14,7 +14,7 @@ import java.util.Map;
  * Description:
  */
 @Parseable
-public class ComplexClass implements FieldParseable {
+public class ComplexClass implements ParseListener {
 
     @Key
     String name;
@@ -46,10 +46,17 @@ public class ComplexClass implements FieldParseable {
     String hidden;
 
     @Key
+    List<String> stringList;
+
+    @Key
+    String[] stringArray;
+
+    @Key
+    @com.raizlabs.android.parser.core.FieldParseable(shouldCreateClass = true)
     SimpleFieldParser simpleFieldParser;
 
     @Override
     public void parse(Object dataInstance, Parser parser) {
-        hidden = (String) parser.getValue(dataInstance, "hidden");
+        hidden = (String) parser.getValue(dataInstance, "hidden", "", false);
     }
 }

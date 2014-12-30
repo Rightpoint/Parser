@@ -1,8 +1,5 @@
-package com.raizlabs.android.parserapp.app;
+package com.raizlabs.android.parser;
 
-
-import com.raizlabs.android.parser.BaseParser;
-import com.raizlabs.android.parser.JSON;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -11,11 +8,10 @@ import java.util.List;
 
 /**
  * Author: andrewgrosner
- * Description:
+ * Description: JSON parser that you extend to get it's implementation.
  */
 @com.raizlabs.android.parser.core.ParseInterface
 public class JsonParser extends BaseParser<JSONObject, JSONArray> {
-
     @Override
     public Object getValue(JSONObject object, String key, Object defValue, boolean required) {
         return JSON.getValue(object, key, defValue, required);

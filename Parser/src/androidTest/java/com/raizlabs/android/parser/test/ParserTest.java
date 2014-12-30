@@ -11,9 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Author: andrewgrosner
- * Contributors: { }
- * Description:
+ * Description: Tests the basic functionality of the library
  */
 public class ParserTest extends AndroidTestCase {
 
@@ -38,6 +36,14 @@ public class ParserTest extends AndroidTestCase {
             jsonObject.put("simpleClasses", jsonArray);
             jsonObject.put("simpleClassList", jsonArray);
 
+            JSONArray stringList = new JSONArray();
+            jsonObject.put("stringList", stringList);
+            stringList.put("This");
+            stringList.put("Is");
+            stringList.put("A");
+            stringList.put("Test");
+            jsonObject.put("stringArray", stringList);
+
             JSONObject mapTest = new JSONObject();
             mapTest.put("This", simpleClass);
             mapTest.put("Is", simpleClass);
@@ -47,7 +53,7 @@ public class ParserTest extends AndroidTestCase {
 
         ComplexClass complexClass = ParserHolder.parse(ComplexClass.class, jsonObject);
         testComplexClass(complexClass);
-        assertEquals(complexClass.otherClass.name, "Test");
+        assertEquals(complexClass.otherClass.name, "Testy");
         SimpleClass[] simpleClasses = complexClass.simpleClasses;
         for(SimpleClass simpleClass: simpleClasses) {
             testSimpleClass(simpleClass);
@@ -77,5 +83,7 @@ public class ParserTest extends AndroidTestCase {
         assertEquals(complexClass.truth, true);
         assertEquals(complexClass.number, 5);
         assertEquals(complexClass.simpleFieldParser.hidden, "Hidden Here");
+        assertNotNull(complexClass.stringList);
+        assertNotNull(complexClass.stringArray);
     }
 }

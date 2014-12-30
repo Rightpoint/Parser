@@ -4,19 +4,18 @@ import com.raizlabs.android.parser.core.Key;
 import com.raizlabs.android.parser.processor.ParserManager;
 import com.raizlabs.android.parser.processor.ProcessorUtils;
 import com.raizlabs.android.parser.processor.validation.KeyValidator;
-import com.raizlabs.android.parser.processor.writer.Writer;
 import com.squareup.javawriter.JavaWriter;
 
-import javax.lang.model.element.Element;
-import javax.lang.model.element.TypeElement;
-import javax.lang.model.element.VariableElement;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.lang.model.element.Element;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
+
 /**
  * Author: andrewgrosner
- * Contributors: { }
  * Description:
  */
 public class ParseableDefinition extends BaseDefinition {
@@ -24,7 +23,7 @@ public class ParseableDefinition extends BaseDefinition {
     public static final String PARSEABLE_CLASS_SUFFIX = "$ParseDefinition";
 
 
-    private boolean isFieldParser = false;
+    public boolean isFieldParser = false;
 
     public ArrayList<KeyDefinition> keyDefinitions = new ArrayList<>();
 

@@ -21,24 +21,20 @@ public class ParseInterfaceDefinition extends BaseDefinition {
 
     public String listObjectType;
 
+    private final DeclaredType typeAdapterType;
+
     public ParseInterfaceDefinition(TypeElement element, ParserManager manager) {
         super(element, manager);
         setDefinitionClassName(INTERFACE_CLASS_SUFFIX);
 
-        DeclaredType typeAdapterInterface = null;
-        final DeclaredType typeAdapterType = manager.getTypes().getDeclaredType(
+        typeAdapterType = manager.getTypes().getDeclaredType(
                 manager.getElements().getTypeElement(Classes.PARSE_INTERFACE),
                 manager.getTypes().getWildcardType(null, null),
                 manager.getTypes().getWildcardType(null, null)
         );
 
 
-        for (TypeMirror superType : manager.getTypes().directSupertypes(element.asType())) {
-            if (manager.getTypes().isAssignable(superType, typeAdapterType)) {
-                typeAdapterInterface = (DeclaredType) superType;
-                break;
-            }
-        }
+        DeclaredType typeAdapterInterface = getTypedDeclaredType(element.asType(), manager);
 
         if (typeAdapterInterface != null) {
             final List<? extends TypeMirror> typeArguments = typeAdapterInterface.getTypeArguments();
@@ -48,6 +44,21 @@ public class ParseInterfaceDefinition extends BaseDefinition {
 
 
         manager.addParseInterfaceDefinition(element, this);
+    }
+
+    protected DeclaredType getTypedDeclaredType(TypeMirror elementType, ParserManager manager) {
+        DeclaredType declaredType = null;
+        for (TypeMirror superType : manager.getTypes().directSupertypes(elementType)) {
+            if (manager.getTypes().isAssignable(superType, typeAdapterType)){
+                if(((DeclaredType) superType).getTypeArguments().isEmpty()) {
+                    declaredType = getTypedDeclaredType(superType, manager);
+                } else {
+                    declaredType = (DeclaredType) superType;
+                }
+            }
+        }
+
+        return declaredType;
     }
 
     @Override

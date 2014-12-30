@@ -1,9 +1,11 @@
 package com.raizlabs.android.parser;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -33,46 +35,44 @@ public class JSON {
     }
 
 
-    public static List parseList(Class<?> returnType, Class<? extends List> listClass, JSONArray inData) {
-        List list = null;
-        try {
-            list = listClass.newInstance();
-        } catch (Throwable e) {
-            throw new RuntimeException(e);
+    @SuppressWarnings("unchecked")
+    public static <ReturnType> ReturnType get(Class<ReturnType> returnType, JSONArray jsonArray, int index) {
+        if(jsonArray == null) {
+            throw new ParseException("JSONArray was null");
         }
-        for(int i = 0; i < inData.length(); i++) {
-            list.add(ParserHolder.parse(returnType, inData.opt(i)));
+        Object value;
+        if(returnType.equals(Boolean.class) || returnType.equals(boolean.class)) {
+            value = jsonArray.optBoolean(index);
+        } else if(returnType.equals(String.class)) {
+            value = jsonArray.optString(index);
+        } else if(returnType.equals(Long.class) || returnType.equals(long.class)) {
+            value = jsonArray.optLong(index);
+        } else if(returnType.equals(Integer.class) || returnType.equals(int.class)){
+            value = jsonArray.optInt(index);
+        } else if(returnType.equals(Double.class) || returnType.equals(double.class)) {
+            value = jsonArray.optDouble(index);
+        } else {
+            value = jsonArray.opt(index);
         }
-
-        return list;
+        return (ReturnType) value;
     }
 
-
-    public static Object[] parseArray(Class returnType, JSONArray inData) {
-
-        Object[] array = (Object[]) Array.newInstance(returnType, inData.length());
-
-        for(int i = 0; i < inData.length(); i++) {
-            array[i] = ParserHolder.parse(returnType, inData.opt(i));
+    public static int count(JSONArray jsonArray) {
+        if(jsonArray == null) {
+            throw new ParseException("JSONArray was null");
         }
-        return array;
+        return jsonArray.length();
     }
 
-    public static Map parseMap(Class clazzType, Class<? extends Map> mapClass, JSONObject jsonObject) {
-        Map map = null;
-
-        try {
-            map = mapClass.newInstance();
-        } catch (Throwable e) {
+    public static List<String> keys(JSONObject jsonObject) {
+        if(jsonObject == null) {
+            throw new ParseException("JSONObject was null");
         }
-
-        if(map != null) {
-            Iterator<String> iterator = jsonObject.keys();
-            while (iterator.hasNext()) {
-                String key = iterator.next();
-                map.put(key, ParserHolder.parse(clazzType, jsonObject.opt(key)));
-            }
+        Iterator<String> keys = jsonObject.keys();
+        List<String> keyList = new ArrayList<>();
+        while(keys.hasNext()) {
+            keyList.add(keys.next());
         }
-        return map;
+        return keyList;
     }
 }

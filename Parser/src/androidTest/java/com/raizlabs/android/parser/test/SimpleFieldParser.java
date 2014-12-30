@@ -14,6 +14,6 @@ public class SimpleFieldParser implements FieldParseable {
 
     @Override
     public void parse(Object instance, Parser parser) {
-        hidden = (String) parser.getValue(instance, "hidden");
+        hidden = (String) parser.getValue(instance, "hidden", "", false);
     }
 }

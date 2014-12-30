@@ -46,10 +46,11 @@ public class ComplexClass implements FieldParseable {
     String hidden;
 
     @Key
+    @com.raizlabs.android.parser.core.FieldParseable(shouldCreateClass = true)
     SimpleFieldParser simpleFieldParser;
 
     @Override
     public void parse(Object dataInstance, Parser parser) {
-        hidden = (String) parser.getValue(dataInstance, "hidden");
+        hidden = (String) parser.getValue(dataInstance, "hidden", "", false);
     }
 }

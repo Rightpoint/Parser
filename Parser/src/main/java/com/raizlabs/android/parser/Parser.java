@@ -5,7 +5,6 @@ import java.util.Map;
 
 /**
  * Author: andrewgrosner
- * Contributors: { }
  * Description: The main interface where you define how to parse data into other objects. This should never be accessed directly,
  * rather use the provided methods in {@link com.raizlabs.android.parser.ParserHolder}.
  */
@@ -17,10 +16,19 @@ public interface Parser<ObjectType, ListType> {
      * @param object   The singular object to retrieve data from
      * @param key      The key to look up a value for
      * @param defValue Used when the value is not in the parser's data source
-     *                 @param required If true, the parser should throw an exception.
+     * @param required If true, the parser should throw an exception.
      * @return
      */
     public Object getValue(ObjectType object, String key, Object defValue, boolean required);
+
+    /**
+     * Retrieves the {@link ObjectType} from the specified {@link ListType}
+     *
+     * @param listType The list type to retrieve from
+     * @param index    The index to retrieve it from
+     * @return The object that was found.
+     */
+    public ObjectType getObject(ListType listType, int index);
 
     /**
      * Creates and returns an instance of the return type from the specified object. The returnType must be annotated
@@ -67,4 +75,17 @@ public interface Parser<ObjectType, ListType> {
      * @return
      */
     public Map parseMap(Class clazzType, ObjectType objectType);
+
+    /**
+     * @return A way to retrieve a list of keys from the object
+     */
+    public List<String> keys(ObjectType objectType);
+
+    /**
+     * Returns the count of items from a listtype.
+     *
+     * @param listType The list type
+     * @return The count of items
+     */
+    public int count(ListType listType);
 }

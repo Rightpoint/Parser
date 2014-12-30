@@ -1,6 +1,7 @@
 package com.raizlabs.android.parser.test;
 
 
+import com.raizlabs.android.parser.BaseParser;
 import com.raizlabs.android.parser.Parser;
 import com.raizlabs.android.parser.JSON;
 import com.raizlabs.android.parser.ParserUtils;
@@ -15,24 +16,18 @@ import java.util.Map;
 
 /**
  * Author: andrewgrosner
- * Contributors: { }
- * Description:
+ * Description: Example JSON parser
  */
 @com.raizlabs.android.parser.core.ParseInterface
-public class JsonParser implements Parser<JSONObject, JSONArray> {
+public class JsonParser extends BaseParser<JSONObject, JSONArray> {
     @Override
     public Object getValue(JSONObject object, String key, Object defValue, boolean required) {
         return JSON.getValue(object, key, defValue, required);
     }
 
     @Override
-    public Object parse(Class returnType, JSONObject object) {
-        return ParserUtils.parse(this, returnType, object);
-    }
-
-    @Override
-    public void parse(Object objectToParse, JSONObject data) {
-        ParserUtils.parse(this, objectToParse, data);
+    public JSONObject getObject(JSONArray jsonArray, int index) {
+        return JSON.getJSONObject(jsonArray, index);
     }
 
     @Override
@@ -48,5 +43,15 @@ public class JsonParser implements Parser<JSONObject, JSONArray> {
     @Override
     public Map parseMap(Class clazzType, JSONObject jsonObject) {
         return JSON.parseMap(clazzType, HashMap.class, jsonObject);
+    }
+
+    @Override
+    public List<String> keys(JSONObject jsonObject) {
+        return JSON.keys(jsonObject);
+    }
+
+    @Override
+    public int count(JSONArray jsonArray) {
+        return JSON.count(jsonArray);
     }
 }

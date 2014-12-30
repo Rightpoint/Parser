@@ -1,9 +1,11 @@
 package com.raizlabs.android.parser;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -74,5 +76,35 @@ public class JSON {
             }
         }
         return map;
+    }
+
+    public static JSONObject getJSONObject(JSONArray jsonArray, int index) {
+        if(jsonArray == null) {
+            throw new ParseException("JSONArray was null");
+        }
+        try {
+            return jsonArray.getJSONObject(index);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static int count(JSONArray jsonArray) {
+        if(jsonArray == null) {
+            throw new ParseException("JSONArray was null");
+        }
+        return jsonArray.length();
+    }
+
+    public static List<String> keys(JSONObject jsonObject) {
+        if(jsonObject == null) {
+            throw new ParseException("JSONObject was null");
+        }
+        Iterator<String> keys = jsonObject.keys();
+        List<String> keyList = new ArrayList<>();
+        while(keys.hasNext()) {
+            keyList.add(keys.next());
+        }
+        return keyList;
     }
 }

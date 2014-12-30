@@ -18,6 +18,6 @@ public class SimpleClass implements FieldParseable {
 
     @Override
     public void parse(Object dataInstance, Parser parser) {
-        name = (String) parser.getValue(dataInstance, "name");
+        name = (String) parser.getValue(dataInstance, "name", "", false);
     }
 }

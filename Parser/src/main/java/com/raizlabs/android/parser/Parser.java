@@ -17,16 +17,19 @@ public interface Parser<ObjectType, ListType> {
      * @param key      The key to look up a value for
      * @param defValue Used when the value is not in the parser's data source
      * @param required If true, the parser should throw an exception.
-     * @return
+     * @return The value that we desire based on these parameters.
+     * It may be the default value if not found and not required.
      */
     public Object getValue(ObjectType object, String key, Object defValue, boolean required);
 
     /**
      * Retrieves the {@link ObjectType} from the specified {@link ListType}
      *
-     * @param listType The list type to retrieve from
-     * @param index    The index to retrieve it from
-     * @return The object that was found.
+     * @param returnType   The kind of object that we expect to return
+     * @param listType     The list type to retrieve from
+     * @param index        The index to retrieve it from
+     * @param <ReturnType> The class of the expected return type.
+     * @return The {@link ReturnType} that was found.
      */
     public <ReturnType> ReturnType getObject(Class<ReturnType> returnType, ListType listType, int index);
 
@@ -49,30 +52,30 @@ public interface Parser<ObjectType, ListType> {
     public void parse(Object objectToParse, ObjectType data);
 
     /**
-     * Creates and returns a list of parseable objects with the specified {@link ListType}.
+     * Creates and returns a list of objects with the specified {@link ListType}.
      *
      * @param returnType The type of object to create.
      * @param inData     The list data we're parsing
-     * @return
+     * @return A list containing a list of objects specified by the returnType
      */
     public List parseList(Class returnType, ListType inData);
 
     /**
-     * Creates and returns an array of parseable objects with the specified {@link ListType}
+     * Creates and returns an array of objects with the specified {@link ListType}
      *
      * @param returnType The type of object to create.
      * @param inData     The list data we're parsing
-     * @return
+     * @return An array of objects specified by the returnType
      */
     public Object[] parseArray(Class returnType, ListType inData);
 
     /**
-     * Creates and returns a {@link java.util.Map} of a String-to-Parseable using the singular {@link ObjectType}.
+     * Creates and returns a {@link java.util.Map} of a String-to-Object using the singular {@link ObjectType}.
      * Pretty much all keys are assumed to be Strings currently, but in the future may support all kinds.
      *
      * @param clazzType  The value-parseable class type
      * @param objectType The object to parse data from
-     * @return
+     * @return A map containing a String-to-clazzType data.
      */
     public Map parseMap(Class clazzType, ObjectType objectType);
 

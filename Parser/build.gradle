@@ -1,30 +1,9 @@
-apply plugin: 'com.android.library'
-apply plugin: 'android-apt'
+apply plugin: 'java'
 
-
-android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.1"
-
-    defaultConfig {
-        minSdkVersion 3
-        targetSdkVersion 21
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
-    }
-
-    packagingOptions {
-        exclude 'META-INF/services/javax.annotation.processing.Processor'
-    }
-}
 
 dependencies {
     compile project(parser_project_prefix + "Parser-Core")
-    androidTestApt project(parser_project_prefix + "Parser-Compiler")
 }
 
 apply from: '../maven_push.gradle'
-apply from: '../android-artifacts.gradle'
+apply from: '../java-artifacts.gradle'

@@ -6,8 +6,9 @@ import java.util.Map;
 
 /**
  * Author: andrewgrosner
- * Description: The main class to parse data from. It requires at least one {@link com.raizlabs.android.parser.Parser} be defined for this
- * class to work as expected. Also, each {@link com.raizlabs.android.parser.Parser} must not reuse similar classes such as two using {@link org.json.JSONObject}.
+ * Description: The main class to parse data from. It requires at least one
+ * {@link com.raizlabs.android.parser.Parser} be defined for this class to work as expected.
+ * Also, each {@link com.raizlabs.android.parser.Parser} must not reuse similar classes such as two using JSONObject.
  */
 public class ParserHolder {
 
@@ -43,11 +44,11 @@ public class ParserHolder {
     }
 
     /**
-     * Creates and returns an instance of the class specified with the data passed in. Look to this method for singular object types such
-     * as {@link org.json.JSONObject}
+     * Creates and returns an instance of the class specified with the data passed in. Look to this method for singular object types from
+     * the parser.
      *
      * @param returnTypeClass The class that's required to use the {@link com.raizlabs.android.parser.core.Parseable} annotation
-     * @param object          The type of data to parse such as {@link org.json.JSONObject}
+     * @param object          The type of data to parse such as a JSONObject
      * @param <ReturnType>    The class that's required to use the {@link com.raizlabs.android.parser.core.Parseable} annotation
      * @return singular {@link ReturnType}
      */
@@ -63,13 +64,14 @@ public class ParserHolder {
 
     /**
      * Parses data safely by checking to see if the data has a parser. If not, nothing will happen.
+     *
      * @param object
      * @param <ReturnType>
      * @return
      */
     static <ReturnType> ReturnType parseSafe(Class<ReturnType> returnTypeClass, Object object) {
         ReturnType retObject = null;
-        if(ParserHolder.hasParser(object.getClass())) {
+        if (ParserHolder.hasParser(object.getClass())) {
             retObject = (ReturnType) ParserHolder.parse(returnTypeClass, object);
         } else {
             retObject = (ReturnType) object;
@@ -82,8 +84,8 @@ public class ParserHolder {
      * Parses an existing instance of the class with the data passed in.
      *
      * @param returnType   The object that's required to use the {@link com.raizlabs.android.parser.core.Parseable} annotation
-     * @param object       The type of data to parse such as {@link org.json.JSONObject}
-     * @param <ReturnType>
+     * @param object       The type of data to parse such as JSONObject
+     * @param <ReturnType> Type of data to return
      */
     @SuppressWarnings("unchecked")
     public static <ReturnType> void parse(ReturnType returnType, Object object) {
@@ -95,10 +97,10 @@ public class ParserHolder {
 
     /**
      * Creates and returns an array of the class specified with the arrayType passed in. Look to this method for array object types
-     * such as {@link org.json.JSONArray}
+     * such as JSONArray
      *
      * @param returnTypeClass The class that's required to use the {@link com.raizlabs.android.parser.core.Parseable} annotation
-     * @param arrayType       The type of data to parse such as {@link org.json.JSONArray}
+     * @param arrayType       The type of data to parse such as JSONArray
      * @param <ReturnType>    The class that's required to use the {@link com.raizlabs.android.parser.core.Parseable} annotation
      * @return array of {@link ReturnType}
      */
@@ -114,10 +116,10 @@ public class ParserHolder {
 
     /**
      * Creates and returns a List of the class specified with the arrayType passed in. Look to this method for array object types
-     * such as {@link org.json.JSONArray}
+     * such as JSONArray
      *
      * @param returnTypeClass The class that's required to use the {@link com.raizlabs.android.parser.core.Parseable} annotation
-     * @param listType        The type of data to parse such as {@link org.json.JSONArray}
+     * @param listType        The type of data to parse such as JSONArray
      * @param <ReturnType>    The class that's required to use the {@link com.raizlabs.android.parser.core.Parseable} annotation
      * @return array of {@link ReturnType}
      */
@@ -133,12 +135,13 @@ public class ParserHolder {
 
     /**
      * Creates and returns a Map of the class specified with the data passed in. Look to this method for singular object types
-     * such as {@link org.json.JSONObject}
+     * such as JSONObject
      *
      * @param keyTypeClass   The class that (so far) requires to be a String
      * @param valueTypeClass The class that's required to use the {@link com.raizlabs.android.parser.core.Parseable} annotation
-     * @param object         The type of data to parse such as {@link org.json.JSONObject}
-     * @param <ReturnType>   The class that's required to use the {@link com.raizlabs.android.parser.core.Parseable} annotation
+     * @param object         The type of data to parse such as JSONObject
+     * @param <KeyType>      The class (mostly a string) that we use for a key
+     * @param <ValueType>    The class that's required to use the {@link com.raizlabs.android.parser.core.Parseable} annotation
      * @return map of {@link KeyType} and {@link ValueType}
      */
     @SuppressWarnings("unchecked")
@@ -152,10 +155,8 @@ public class ParserHolder {
     }
 
     /**
-     * Returns the {@link com.raizlabs.android.parser.ObjectParser} for the specified class.
-     *
-     * @param parseableClass
-     * @return
+     * @param parseableClass The class that is annotated with {@link com.raizlabs.android.parser.core.Parseable}
+     * @return the {@link com.raizlabs.android.parser.ObjectParser} for the specified class.
      */
     public static ObjectParser getParseable(Class<?> parseableClass) {
         getManager();
@@ -163,10 +164,10 @@ public class ParserHolder {
     }
 
     /**
-     * Returns the {@link com.raizlabs.android.parser.Parser} for the specified data class such as {@link org.json.JSONObject}
+     * Returns the {@link com.raizlabs.android.parser.Parser} for the specified data class such as JSONObject
      *
-     * @param objectType
-     * @return
+     * @param objectType The kind of object that is registered for a {@link com.raizlabs.android.parser.Parser}
+     * @return The parser for the specified object
      */
     public static Parser getParser(Class<?> objectType) {
         getManager();

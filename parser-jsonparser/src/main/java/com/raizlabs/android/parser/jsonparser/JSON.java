@@ -1,4 +1,6 @@
-package com.raizlabs.android.parser;
+package com.raizlabs.android.parser.jsonparser;
+
+import com.raizlabs.android.parser.ParseException;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -1,5 +1,7 @@
-package com.raizlabs.android.parser;
+package com.raizlabs.android.parser.jsonparser;
 
+
+import com.raizlabs.android.parser.BaseParser;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

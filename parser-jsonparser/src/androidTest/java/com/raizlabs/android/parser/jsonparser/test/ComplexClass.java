@@ -1,4 +1,4 @@
-package com.raizlabs.android.parser.test;
+package com.raizlabs.android.parser.jsonparser.test;
 
 import com.raizlabs.android.parser.ParseListener;
 import com.raizlabs.android.parser.Parser;

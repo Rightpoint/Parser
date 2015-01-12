@@ -1,2 +1,2 @@
-include ':app', ':Parser', ':Parser-Compiler', ':Parser-Core', 'Parser-JsonParser'
+include ':app', ':Parser', ':Parser-Compiler', ':Parser-Core', ':Parser-FastJsonParser', 'Parser-JsonParser'
 

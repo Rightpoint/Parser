@@ -1,9 +1,7 @@
 apply plugin: 'java'
 
-
-dependencies {
-    compile project(parser_project_prefix + "Parser-Core")
-}
+targetCompatibility = JavaVersion.VERSION_1_7
+sourceCompatibility = JavaVersion.VERSION_1_7
 
 apply from: '../maven_push.gradle'
 apply from: '../java-artifacts.gradle'

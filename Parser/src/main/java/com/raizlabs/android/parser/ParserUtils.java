@@ -54,7 +54,7 @@ public class ParserUtils {
      * Runs through the keys of the object specified. It must be the single object type of the specified
      * parser.
      *
-     * @param objectToRunOver The object that contains a mapping of <String, Object></String,> values
+     * @param objectToRunOver The object that contains a mapping of String, Object values
      * @param keyDelegate     The delegate to execute with
      */
     @SuppressWarnings("unchecked")
@@ -109,13 +109,14 @@ public class ParserUtils {
      * @param returnType      The {@link ReturnType} class
      * @param listClass       The list class to create
      * @param listObjectToUse The list type used in a Parser
-     * @param <ReturnType>
+     * @param <ReturnType>    The type of object that is expected to be returned as part of the list.
+     * @param <ListType>      The type of list to use as the holder for the {@link ReturnType}
      * @return A list of {@link ReturnType}
      */
     @SuppressWarnings("unchecked")
     public static <ReturnType, ListType> List<ReturnType> parseList(Parser<?, ListType> parser,
-                                                          Class<ReturnType> returnType, Class<? extends List> listClass,
-                                                          ListType listObjectToUse) {
+                                                                    Class<ReturnType> returnType, Class<? extends List> listClass,
+                                                                    ListType listObjectToUse) {
         List<ReturnType> list = null;
         try {
             list = listClass.newInstance();
@@ -136,12 +137,12 @@ public class ParserUtils {
      * @param parser          The parser to use
      * @param returnType      The return type
      * @param listObjectToUse The list type used in a Parser
-     * @param <ReturnType>
+     * @param <ReturnType>    The type of object that is expected to be returned as part of the Array
      * @return An array of {@link ReturnType}
      */
     @SuppressWarnings("unchecked")
     public static <ReturnType, ListType> ReturnType[] parseArray(Parser<?, ListType> parser,
-                                                       Class<ReturnType> returnType, ListType listObjectToUse) {
+                                                                 Class<ReturnType> returnType, ListType listObjectToUse) {
 
         int count = parser.count(listObjectToUse);
         ReturnType[] array = (ReturnType[]) Array.newInstance(returnType, count);
@@ -153,7 +154,7 @@ public class ParserUtils {
     }
 
     public static <ObjectType, ValueType> Map parseMap(Parser<ObjectType, ?> parser, Class<ValueType> valueType,
-                                            Class<? extends Map> mapClass, ObjectType objectToParse) {
+                                                       Class<? extends Map> mapClass, ObjectType objectToParse) {
         Map<String, ValueType> map = null;
 
         try {
@@ -161,9 +162,9 @@ public class ParserUtils {
         } catch (Throwable e) {
         }
 
-        if(map != null) {
+        if (map != null) {
             List<String> keys = parser.keys(objectToParse);
-            for(String key: keys) {
+            for (String key : keys) {
                 map.put(key, ParserHolder.parse(valueType, parser.getValue(objectToParse, key, null, true)));
             }
         }

@@ -1,0 +1,10 @@
+apply plugin: 'java'
+
+dependencies {
+    compile project(parser_project_prefix + "Parser")
+
+    compile files('libs/fastjson-1.2.1.jar')
+}
+
+apply from: '../maven_push.gradle'
+apply from: '../java-artifacts.gradle'

@@ -7,7 +7,8 @@ import com.raizlabs.android.parser.BaseParser;
 import java.util.List;
 
 /**
- * Description: Defines the {@link com.raizlabs.android.parser.Parser} for FastJSON types.
+ * Description: Defines the {@link com.raizlabs.android.parser.Parser} for FastJSON types. Extend this
+ * to register it for parsing.
  */
 public class FastJsonParser extends BaseParser<JSONObject, JSONArray> {
 

@@ -12,7 +12,6 @@ import java.util.List;
  * Author: andrewgrosner
  * Description: JSON parser that you extend to get it's implementation.
  */
-@com.raizlabs.android.parser.core.ParseInterface
 public class JsonParser extends BaseParser<JSONObject, JSONArray> {
     @Override
     public Object getValue(JSONObject object, String key, Object defValue, boolean required) {

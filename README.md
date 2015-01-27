@@ -1,11 +1,11 @@
 [![Android Weekly](http://img.shields.io/badge/Android%20Weekly-%23133-2CB3E5.svg?style=flat)](http://androidweekly.net/issues/issue-133)
-[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Parser-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1255) [![Raizlabs Repository](http://img.shields.io/badge/Raizlabs%20Repository-1.1.0-blue.svg?style=flat)](https://github.com/Raizlabs/maven-releases)
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Parser-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1255) [![Raizlabs Repository](http://img.shields.io/badge/Raizlabs%20Repository-1.2.0-blue.svg?style=flat)](https://github.com/Raizlabs/maven-releases)
 
 # Parser
 
-Parser is the fastest Key-Value-to-Model object parser that uses annotation processing to generate the parsing for you. It only uses reflection __one time__ and parsing is as fast as writing the code yourself. 
+Parser is a blazing fast Key-Value-to-Model object parser that uses annotation processing to generate parsing definitions for you. It enables powerful flexibility by abstracting out the parse from ```JSONObject``` so you can create your own ```Parser``` from another JSON library without changing the core of your application's code. 
 
-The library enables you to swap and easily move between different JSON libraries or __any__ key-value object. Extend the standard ```JsonParser``` or create your own ```@ParseInterface```/```Parser```. 
+The library enables you to swap and easily move between different JSON libraries or __any__ key-value object. Extend the standard ```JsonParser``` or create your own ```@ParseInterface```/```Parser``` by extending ```BaseParser```. 
 
 ## Getting Started
 
@@ -25,17 +25,40 @@ Add the library to the project-level build.gradle, using the [apt plugin](https:
 ```groovy
 
   dependencies {
-    apt 'com.raizlabs.android:Parser-Compiler:1.1.0'
-    aarLinkSources 'com.raizlabs.android:Parser-Compiler:1.1.0:sources@jar'
-    compile 'com.raizlabs.android:Parser-Core:1.1.0'
-    aarLinkSources 'com.raizlabs.android:Parser-Core:1.1.0:sources@jar'
-    compile 'com.raizlabs.android:Parser:1.1.0'
-    aarLinkSources 'com.raizlabs.android:Parser:1.1.0:sources@jar'
+    apt 'com.raizlabs.android:Parser-Compiler:1.2.0'
+    aarLinkSources 'com.raizlabs.android:Parser-Compiler:1.2.0:sources@jar'
+    compile 'com.raizlabs.android:Parser:1.2.0'
+    aarLinkSources 'com.raizlabs.android:Parser:1.2.0:sources@jar'
   }
 
 ```
 
+For using the built-in Android ```JSONObject``` library add:
+
+```java
+
+    compile 'com.raizlabs.android:Parser-JsonParser:1.2.0'
+    aarLinkSources 'com.raizlabs.android:Parser-JsonParser:1.2.0:sources@jar'
+
+```
+
+For using ```FastJSON``` [here](https://github.com/alibaba/fastjson) add:
+
+```java
+
+    compile 'com.raizlabs.android:Parser-FastJsonParser:1.2.0'
+    aarLinkSources 'com.raizlabs.android:Parser-FastJsonParser:1.2.0:sources@jar'
+
+```
+
 ## Changelog
+
+### 1.2.0
+
+  1. Makes ```Parser``` a java library with ```Parser-Compiler```. No need to use for just Android anymore. Also, ```Parser-Core``` is now part of ```Parser``` since ```Parser``` became a java-library.
+  2. Moves out ```JsonParser``` into its own Android library
+  3. Creates the ```FastJsonParser``` to use with ```FastJSON```. 
+  4. Doc and comment improvements
 
 ### 1.1.0
   1. Changed the ```Parser``` interface by adding ```keys()```, ```count()```, and ```getObject()```. These three methods now enable iteration of data in ```ParserUtils``` and simplify some of the implementation from now on.
@@ -52,9 +75,11 @@ Add the library to the project-level build.gradle, using the [apt plugin](https:
 
 Before creating any parse objects, you need to define a ```Parser```by adding the ```@ParseInterface``` annotation and implementing the ```Parser<ObjectType, ListType>``` interface. 
 
-To make things simpler, all you need to do is to extend the ```JsonParser``` class included in the library and add the ```@ParseInterface``` annotation.
+To make things simpler, all you need to do is to extend the abstract ```BaseParser``` class included in the library and add the ```@ParseInterface``` annotation. If using ```Parser-JsonParser```, extend the included ```JsonParser``` or if using ```Parser-FastJsonParser``` extend the included ```FastJsonParser```.
 
 This will register your parser with those datatypes, so that when we call ```ParserHolder.parse()```, the ```ParserHolder``` knows how to handle the two types. You can create Parsers for other key-value data types, but they must **not** reference the same classes.
+
+For example:
 
 ```java
 
@@ -66,12 +91,17 @@ public class JsonParser extends com.raizlabs.android.JsonParser {
 
 ### Define a Parseable Class
 
-In order to register a class to generate its ```$ParseDefinition``` you need:
+Parseable classes are defined as objects that contain fields that we can parse into. You need to register each class so that 
+the compiler can generate its ```$ParseDefinition```. In order to do so, you need:
   1. Add the ```@Parseable``` annotation.
   2. At least 1 ```@Key``` field or implement ```ParseListener```.
-  3. Have a default constructor available so when nested, we can reference the default constructor. 
+  3. Have a default constructor available so when nested, we can reference the default constructor when parsing data. 
   4. All fields **must** be package private or public in order for the ```$ParseDefinition``` of the class to have access to the fields when parsing.
+  
 
+#### Example
+
+Simple example will look for a key named "myField" using a ```Parser``` and fill it with the ```String``` value from data passed through the ```ParserHolder```.
 
 ```java
 
@@ -87,6 +117,8 @@ public class MyParseable {
 ```
 
 ### How To Parse
+
+We wanted to make parsing as simple as possible so ```ParserHolder.parse()``` can take in any object that has a parser and turn it into the ```Parseable``` class we want. 
 
 ```java
 
@@ -107,18 +139,18 @@ Parser supports a good amount of flexible features that make this library very p
 ### Annotations
 
 ```@Parseable``` will generate a ```$ParseDefinition``` class used in parsing the object. To list to it's own Parse events,
-have the class implement ```FieldParseable```
+have the class implement ```ParseListener```
 
 ```@FieldParseable``` marks a field as suscribing to the parse event data of parent ```@Parseable```. Must implement the ```FieldParsible``` interface. 
 
-```@ParseInterface``` used in conjunction with ```Parser``` interface to define parsers for a type of data object.
+```@ParseInterface```: use in conjunction with ```Parser``` interface to define parsers for a type of data object. You can also extend ```BaseParser``` (for custom JSON or key-value libraries), ```JsonParser``` for android JSON, or ```FastJsonParser``` for FastJSON.
 
-```@Key``` tells the **Parser*** what key to reference for a specific field. The key is defaulted to the name of the field. A ```defValue``` can be specified as a string to use if the value is missing from a parse. Custom objects can be instantiated too with as default value, however you need to use the fully-qualified class name of any custom class you use. The default for primitive types is there "false", "0", or "null" equivalent. ```required``` if true, will throw a ```ParseException``` when not found. 
+```@Key``` tells the **Parser*** what key to reference for a specific field. The key is defaulted to the name of the field. A ```defValue``` can be specified as a string to use if the value is missing from a parse. Custom objects can be instantiated too with as default value, however you need to use the fully-qualified class name of any custom class you use. The default for all types are: "false" for boolean, "0" for numbers, or a "null" equivalent for any non-primitive. If ```required()``` is true, will throw a ```ParseException``` when a key is not found. 
 
 ### Supported Types
 
   1. All datatypes supported by the ```JSONObject``` class when using the ```JsonParser```
-  2. Lists using ```List<T>```. Default will be ```ArrayList```
+  2. Lists using ```List<T>```. Default list class will be ```ArrayList```
   3. Maps defined as ```Map<String, Value>```. The default is ```HashMap```.
   4. Array of any supported type
   5. Primitives will be boxed up to the corresponding classes before returning to its primitive type.

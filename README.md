@@ -9,47 +9,42 @@ The library enables you to swap and easily move between different JSON libraries
 
 ## Getting Started
 
-Add the maven repo url to your build.gradle:
-
 ```groovy
-
-  repositories {
+  buildscript {
+    repositories {
         maven { url "https://raw.github.com/Raizlabs/maven-releases/master/releases" }
+    }
+    classpath 'com.raizlabs:Griddle:1.0.0'
+    classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
   }
+  
+  allprojects {
+    repositories {
+        maven { url "https://raw.github.com/Raizlabs/maven-releases/master/releases" }
+    }
+  }
+
 
 ```
 
 Add the library to the project-level build.gradle, using the [apt plugin](https://bitbucket.org/hvisser/android-apt) and the 
-[AARLinkSources](https://github.com/xujiaao/AARLinkSources) plugin::
+[Griddle](https://github.com/Raizlabs/Griddle) plugin:
 
 ```groovy
 
+  apply plugin: 'com.neenbedankt.android-apt'
+  apply plugin: 'com.raizlabs.griddle'
+
   dependencies {
     apt 'com.raizlabs.android:Parser-Compiler:1.2.0'
-    aarLinkSources 'com.raizlabs.android:Parser-Compiler:1.2.0:sources@jar'
-    compile 'com.raizlabs.android:Parser:1.2.0'
-    aarLinkSources 'com.raizlabs.android:Parser:1.2.0:sources@jar'
+    mod "com.raizlabs.android:{Parser}:1.2.0"
   }
 
 ```
 
-For using the built-in Android ```JSONObject``` library add:
+For using the built-in Android ```JSONObject``` library add ```Parser-JsonParser``` to the ```{}``` enclosure from the main section.
 
-```java
-
-    compile 'com.raizlabs.android:Parser-JsonParser:1.2.0'
-    aarLinkSources 'com.raizlabs.android:Parser-JsonParser:1.2.0:sources@jar'
-
-```
-
-For using ```FastJSON``` [here](https://github.com/alibaba/fastjson) add:
-
-```java
-
-    compile 'com.raizlabs.android:Parser-FastJsonParser:1.2.0'
-    aarLinkSources 'com.raizlabs.android:Parser-FastJsonParser:1.2.0:sources@jar'
-
-```
+For using ```FastJSON``` [here](https://github.com/alibaba/fastjson) add ```Parser-FastJsonParser``` to the ```{}``` enclosure from the main section.
 
 ## Changelog
 

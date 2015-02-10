@@ -37,7 +37,7 @@ Add the library to the project-level build.gradle, using the [apt plugin](https:
 
   dependencies {
     apt 'com.raizlabs.android:Parser-Compiler:1.2.0'
-    mod "com.raizlabs.android:{Parser}:1.2.0"
+    mod "com.raizlabs.android:{Parser-Core}:1.2.0"
   }
 
 ```

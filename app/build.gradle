@@ -36,9 +36,9 @@ apt {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    apt project(':Parser-Compiler')
-    compile project(':Parser')
+    apt project(parser_project_prefix + 'Parser-Compiler')
+    compile project(parser_project_prefix + 'Parser')
+    compile project(parser_project_prefix + 'Parser-JsonParser')
     compile 'com.android.support:appcompat-v7:21.0.0'
 }
 

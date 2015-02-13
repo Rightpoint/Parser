@@ -2,6 +2,7 @@ package com.raizlabs.android.parser.processor.definition;
 
 import com.raizlabs.android.parser.core.FieldParseable;
 import com.raizlabs.android.parser.core.Key;
+import com.raizlabs.android.parser.core.Mergeable;
 import com.raizlabs.android.parser.core.Parseable;
 import com.raizlabs.android.parser.processor.ParserManager;
 import com.raizlabs.android.parser.processor.ProcessorUtils;
@@ -106,7 +107,9 @@ public class KeyDefinition implements Writer {
 
     boolean required;
 
-    public KeyDefinition(ParserManager manager, VariableElement element) {
+    boolean isMergeable = false;
+
+    public KeyDefinition(ParserManager manager, VariableElement element, boolean isParentMergeable) {
         this.element = element;
 
         Key key = element.getAnnotation(Key.class);
@@ -115,6 +118,8 @@ public class KeyDefinition implements Writer {
         if (keyName == null || keyName.isEmpty()) {
             keyName = variableName;
         }
+
+        isMergeable = element.getAnnotation(Mergeable.class) != null;
 
         required = key.required();
 
@@ -127,7 +132,9 @@ public class KeyDefinition implements Writer {
             type = Type.NORMAL;
             isPrimitive = true;
 
-            if(defaultValue == null || defaultValue.isEmpty()) {
+            if(isMergeable || isParentMergeable) {
+                defaultValue = String.format("parseable.%1s", variableName);
+            } else if(defaultValue == null || defaultValue.isEmpty()) {
                 TypeKind typeKind = typeMirror.getKind();
                 if(typeKind.equals(TypeKind.LONG)) {
                     defaultValue = "0l";
@@ -146,8 +153,9 @@ public class KeyDefinition implements Writer {
                 }
             }
         } else {
-
-            if(defaultValue == null || defaultValue.isEmpty()) {
+            if(isMergeable || isParentMergeable) {
+                defaultValue = String.format("parseable.%1s", variableName);
+            } else if(defaultValue == null || defaultValue.isEmpty()) {
                 defaultValue = "null";
             }
 

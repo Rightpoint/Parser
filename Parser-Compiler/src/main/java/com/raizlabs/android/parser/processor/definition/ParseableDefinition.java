@@ -1,6 +1,7 @@
 package com.raizlabs.android.parser.processor.definition;
 
 import com.raizlabs.android.parser.core.Key;
+import com.raizlabs.android.parser.core.Mergeable;
 import com.raizlabs.android.parser.processor.ParserManager;
 import com.raizlabs.android.parser.processor.ProcessorUtils;
 import com.raizlabs.android.parser.processor.validation.KeyValidator;
@@ -25,17 +26,21 @@ public class ParseableDefinition extends BaseDefinition {
 
     public boolean isFieldParser = false;
 
+    public boolean isMergeable = false;
+
     public ArrayList<KeyDefinition> keyDefinitions = new ArrayList<>();
 
     public ParseableDefinition(TypeElement typeElement, ParserManager manager) {
         super(typeElement, manager);
         setDefinitionClassName(PARSEABLE_CLASS_SUFFIX);
 
+        isMergeable = typeElement.getAnnotation(Mergeable.class) != null;
+
         List<? extends Element> elements = typeElement.getEnclosedElements();
         KeyValidator keyValidator = new KeyValidator(manager);
         for (Element enclosedElement : elements) {
             if (enclosedElement.getAnnotation(Key.class) != null) {
-                KeyDefinition keyDefinition = new KeyDefinition(manager, (VariableElement) enclosedElement);
+                KeyDefinition keyDefinition = new KeyDefinition(manager, (VariableElement) enclosedElement, isMergeable);
                 if (keyValidator.validate(manager, keyDefinition)) {
                     keyDefinitions.add(keyDefinition);
                 }

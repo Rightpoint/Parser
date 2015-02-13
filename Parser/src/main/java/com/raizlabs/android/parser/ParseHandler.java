@@ -1,17 +1,24 @@
 package com.raizlabs.android.parser;
 
 /**
- * Description: Provides an abstraction from the {@link ParseableClass} and the parser itself. Declare
- * this in {@link ParseableClass}
+ * Author: andrewgrosner
+ * Description: Internal usage that will generate how to parse an object
  */
 public interface ParseHandler<ParseableClass> {
 
     /**
-     * Called when this is specified within a {@link com.raizlabs.android.parser.core.FieldParseable}
-     *
-     * @param parseable     The object to set fields on
-     * @param objectToParse The object such as a JSON object or FastJson object, or a list type as well
-     * @param parser        The parser that is currently used.
+     * @return a new instance of the {@link ParseableClass} without using reflection.
      */
-    void handleParse(ParseableClass parseable, Object objectToParse, Parser parser);
+    public ParseableClass getInstance();
+
+    /**
+     * Will set all of the fields for the {@link ParseableClass} that define a {@link com.raizlabs.android.parser.core.Key} attribute.
+     *
+     * @param parseable     The instance that we are parsing
+     * @param dataInstance The singular data type that we're parsing. E.g. JSONObject
+     * @param parser       The parser we're using to parse the dataInstance into the parsible
+     */
+    public void parse(ParseableClass parseable, Object dataInstance, Parser parser);
+
+
 }

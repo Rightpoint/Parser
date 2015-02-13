@@ -20,4 +20,10 @@ public @interface Parseable {
      * @return Define a custom {@link com.raizlabs.android.parser.ParseHandler} to provide a custom parse implementation to complement this parse.
      */
     Class<? extends ParseHandler> parseHandler() default ParseHandler.class;
+
+    /**
+     * @return True if we don't generate a parse definition and instead use the custom {@link com.raizlabs.android.parser.ParseHandler} .
+     * If false, the normal parse definition is done first, then the handler will be called.
+     */
+    boolean parseHandlerOverridesGenerated() default false;
 }

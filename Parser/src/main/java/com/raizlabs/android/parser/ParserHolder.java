@@ -20,15 +20,15 @@ public class ParserHolder {
     /**
      * The map between a class and it's defined parser that describes how it gets filled in by a {@link com.raizlabs.android.parser.Parser}
      */
-    private static Map<Class<?>, ObjectParser> mParseableMap = new HashMap<>();
+    private static Map<Class<?>, ParseHandler> mParseableMap = new HashMap<>();
 
     /**
-     * Simply, when created, will fill this class with all of the {@link com.raizlabs.android.parser.Parser} and {@link com.raizlabs.android.parser.ObjectParser} needed.
+     * Simply, when created, will fill this class with all of the {@link com.raizlabs.android.parser.Parser} and {@link ParseHandler} needed.
      */
     private static ParserManagerInterface manager;
 
     /**
-     * Creates the manager, which in turn will fill this class with all of the {@link com.raizlabs.android.parser.Parser} and {@link com.raizlabs.android.parser.ObjectParser} needed.
+     * Creates the manager, which in turn will fill this class with all of the {@link com.raizlabs.android.parser.Parser} and {@link ParseHandler} needed.
      *
      * @return
      */
@@ -156,9 +156,9 @@ public class ParserHolder {
 
     /**
      * @param parseableClass The class that is annotated with {@link com.raizlabs.android.parser.core.Parseable}
-     * @return the {@link com.raizlabs.android.parser.ObjectParser} for the specified class.
+     * @return the {@link ParseHandler} for the specified class.
      */
-    public static ObjectParser getParseable(Class<?> parseableClass) {
+    public static ParseHandler getParseable(Class<?> parseableClass) {
         getManager();
         return mParseableMap.get(parseableClass);
     }
@@ -179,13 +179,13 @@ public class ParserHolder {
     }
 
     /**
-     * internal method that will add each {@link com.raizlabs.android.parser.ObjectParser} automatically
+     * internal method that will add each {@link ParseHandler} automatically
      *
      * @param parseableClass The class that is annotated with {@link com.raizlabs.android.parser.core.Parseable}
-     * @param objectParser   The corresponding {@link com.raizlabs.android.parser.ObjectParser} for that class.
+     * @param parseHandler   The corresponding {@link ParseHandler} for that class.
      */
-    static void addParseable(Class<?> parseableClass, ObjectParser objectParser) {
-        mParseableMap.put(parseableClass, objectParser);
+    static void addParseable(Class<?> parseableClass, ParseHandler parseHandler) {
+        mParseableMap.put(parseableClass, parseHandler);
     }
 
     /**

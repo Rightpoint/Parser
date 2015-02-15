@@ -1,5 +1,5 @@
 [![Android Weekly](http://img.shields.io/badge/Android%20Weekly-%23133-2CB3E5.svg?style=flat)](http://androidweekly.net/issues/issue-133)
-[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Parser-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1255) [![Raizlabs Repository](http://img.shields.io/badge/Raizlabs%20Repository-1.2.0-blue.svg?style=flat)](https://github.com/Raizlabs/maven-releases)
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Parser-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1255) [![Raizlabs Repository](http://img.shields.io/badge/Raizlabs%20Repository-1.3.0-blue.svg?style=flat)](https://github.com/Raizlabs/maven-releases)
 
 # Parser
 
@@ -14,7 +14,7 @@ The library enables you to swap and easily move between different JSON libraries
     repositories {
         maven { url "https://raw.github.com/Raizlabs/maven-releases/master/releases" }
     }
-    classpath 'com.raizlabs:Griddle:1.0.0'
+    classpath 'com.raizlabs:Griddle:1.0.2'
     classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
   }
   
@@ -36,8 +36,8 @@ Add the library to the project-level build.gradle, using the [apt plugin](https:
   apply plugin: 'com.raizlabs.griddle'
 
   dependencies {
-    apt 'com.raizlabs.android:Parser-Compiler:1.2.0'
-    mod "com.raizlabs.android:{Parser-Core}:1.2.0"
+    apt 'com.raizlabs.android:Parser-Compiler:1.3.0'
+    mod "com.raizlabs.android:Parser-Core:1.3.0"
   }
 
 ```
@@ -47,6 +47,8 @@ For using the built-in Android ```JSONObject``` library add ```Parser-JsonParser
 For using ```FastJSON``` [here](https://github.com/alibaba/fastjson) add ```Parser-FastJsonParser``` to the ```{}``` enclosure from the main section.
 
 ## Changelog
+
+### 1.3.0
 
 ### 1.2.0
 
@@ -134,13 +136,15 @@ Parser supports a good amount of flexible features that make this library very p
 ### Annotations
 
 ```@Parseable``` will generate a ```$ParseDefinition``` class used in parsing the object. To list to it's own Parse events,
-have the class implement ```ParseListener```
+have the class implement ```ParseListener```. Can define its own ```ParseHandler``` to either override the generated parse, or to include it in the main parse.
 
 ```@FieldParseable``` marks a field as suscribing to the parse event data of parent ```@Parseable```. Must implement the ```FieldParsible``` interface. 
 
 ```@ParseInterface```: use in conjunction with ```Parser``` interface to define parsers for a type of data object. You can also extend ```BaseParser``` (for custom JSON or key-value libraries), ```JsonParser``` for android JSON, or ```FastJsonParser``` for FastJSON.
 
 ```@Key``` tells the **Parser*** what key to reference for a specific field. The key is defaulted to the name of the field. A ```defValue``` can be specified as a string to use if the value is missing from a parse. Custom objects can be instantiated too with as default value, however you need to use the fully-qualified class name of any custom class you use. The default for all types are: "false" for boolean, "0" for numbers, or a "null" equivalent for any non-primitive. If ```required()``` is true, will throw a ```ParseException``` when a key is not found. 
+
+```@Mergeable```: Enables parsing multiple sources of data into a single ```@Parseable``` or field. Consequent parses to the same object will not override preset data (if that value is missing from the JSON).
 
 ### Supported Types
 

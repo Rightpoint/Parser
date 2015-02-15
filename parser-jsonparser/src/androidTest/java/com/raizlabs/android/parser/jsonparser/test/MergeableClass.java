@@ -2,6 +2,7 @@ package com.raizlabs.android.parser.jsonparser.test;
 
 import com.raizlabs.android.parser.core.Key;
 import com.raizlabs.android.parser.core.Mergeable;
+import com.raizlabs.android.parser.core.NotMergeable;
 import com.raizlabs.android.parser.core.Parseable;
 
 /**
@@ -16,5 +17,9 @@ public class MergeableClass {
 
     @Key
     boolean isSet;
+
+    @NotMergeable
+    @Key
+    boolean notMergeable;
 
 }

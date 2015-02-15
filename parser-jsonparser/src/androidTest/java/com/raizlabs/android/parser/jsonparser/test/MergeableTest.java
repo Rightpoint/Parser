@@ -17,6 +17,7 @@ public class MergeableTest extends AndroidTestCase {
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("name", "OldName");
+        jsonObject.put("notMergeable", true);
 
         ParserHolder.parse(mergeableClass, jsonObject);
 
@@ -27,5 +28,6 @@ public class MergeableTest extends AndroidTestCase {
 
         assertTrue(mergeableClass.isSet);
         assertEquals("OldName", mergeableClass.name);
+        assertFalse(mergeableClass.notMergeable);
     }
 }

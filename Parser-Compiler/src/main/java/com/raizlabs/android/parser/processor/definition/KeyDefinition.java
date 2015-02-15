@@ -3,6 +3,7 @@ package com.raizlabs.android.parser.processor.definition;
 import com.raizlabs.android.parser.core.FieldParseable;
 import com.raizlabs.android.parser.core.Key;
 import com.raizlabs.android.parser.core.Mergeable;
+import com.raizlabs.android.parser.core.NotMergeable;
 import com.raizlabs.android.parser.core.Parseable;
 import com.raizlabs.android.parser.processor.ParserManager;
 import com.raizlabs.android.parser.processor.ProcessorUtils;
@@ -109,6 +110,8 @@ public class KeyDefinition implements Writer {
 
     boolean isMergeable = false;
 
+    boolean notMergeable = false;
+
     public KeyDefinition(ParserManager manager, VariableElement element, boolean isParentMergeable) {
         this.element = element;
 
@@ -120,6 +123,12 @@ public class KeyDefinition implements Writer {
         }
 
         isMergeable = element.getAnnotation(Mergeable.class) != null;
+        if(!isMergeable) {
+            notMergeable = element.getAnnotation(NotMergeable.class) != null;
+            if(notMergeable) {
+                isParentMergeable = false;
+            }
+        }
 
         required = key.required();
 

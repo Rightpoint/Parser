@@ -44,7 +44,7 @@ public abstract class BaseHandler implements Handler {
         if (validator.validate(parserManager, definition)) {
             try {
                 if (!(definition instanceof ParseableDefinition)
-                        || ((ParseableDefinition) definition).parseHandlerClazz == null) {
+                        || !((ParseableDefinition) definition).parseHandlerOverridesDefinition) {
 
                     JavaWriter javaWriter = new JavaWriter(parserManager.getFiler().createSourceFile(definition.getSourceFileName()).openWriter());
                     definition.write(javaWriter);

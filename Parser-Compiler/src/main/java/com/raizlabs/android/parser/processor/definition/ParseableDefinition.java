@@ -1,5 +1,6 @@
 package com.raizlabs.android.parser.processor.definition;
 
+import com.google.common.collect.Sets;
 import com.raizlabs.android.parser.ParseHandler;
 import com.raizlabs.android.parser.core.Key;
 import com.raizlabs.android.parser.core.Mergeable;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.lang.model.element.Element;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 
@@ -32,6 +34,8 @@ public class ParseableDefinition extends BaseDefinition {
 
     public String parseHandlerClazz;
 
+    public boolean parseHandlerOverridesDefinition = false;
+
     public ArrayList<KeyDefinition> keyDefinitions = new ArrayList<>();
 
     public ParseableDefinition(TypeElement typeElement, ParserManager manager) {
@@ -45,6 +49,7 @@ public class ParseableDefinition extends BaseDefinition {
         String clazz = ProcessorUtils.getClassFromAnnotation(parseable);
         if(!ParseHandler.class.getCanonicalName().equals(clazz)) {
             parseHandlerClazz = clazz;
+            parseHandlerOverridesDefinition = parseable.parseHandlerOverridesGenerated();
         }
 
         List<? extends Element> elements = typeElement.getEnclosedElements();
@@ -63,16 +68,21 @@ public class ParseableDefinition extends BaseDefinition {
 
     }
 
-    @Override
-    public String getSourceFileName() {
-        if(parseHandlerClazz != null) {
+    public String getParseHandlerClass() {
+        if(parseHandlerClazz != null && parseHandlerOverridesDefinition) {
             return parseHandlerClazz;
+        } else {
+            return super.getSourceFileName();
         }
-        return super.getSourceFileName();
     }
 
     @Override
     public void onWriteDefinition(JavaWriter javaWriter) throws IOException {
+
+        if(parseHandlerClazz != null) {
+            javaWriter.emitEmptyLine();
+            javaWriter.emitField(parseHandlerClazz, "customParseHandler", Sets.newHashSet(Modifier.FINAL), "new " + parseHandlerClazz + "()");
+        }
 
         javaWriter.emitEmptyLine();
         javaWriter.emitAnnotation(Override.class);
@@ -95,6 +105,10 @@ public class ParseableDefinition extends BaseDefinition {
 
         if (isFieldParser) {
             javaWriter.emitStatement("((%1s)parseable).parse(%1s, %1s)", Classes.FIELD_PARSIBLE, "instance", "parse");
+        }
+
+        if (parseHandlerClazz != null) {
+            javaWriter.emitStatement("customParseHandler.parse(%1s, %1s, %1s)", "parseable", "instance", "parse");
         }
 
         javaWriter.endMethod();

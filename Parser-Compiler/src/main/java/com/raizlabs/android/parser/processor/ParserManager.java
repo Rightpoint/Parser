@@ -111,7 +111,7 @@ public class ParserManager implements Handler, Writer, Definition {
 
         for (ParseableDefinition parseableDefinition : parseableDefinitionMap.values()) {
             javaWriter.emitStatement("ParserHolder.addParseable(%1s.class, new %1s())",
-                    parseableDefinition.getFQElementClassName(), parseableDefinition.getSourceFileName());
+                    parseableDefinition.getFQElementClassName(), parseableDefinition.getParseHandlerClass());
         }
 
         for (ParseInterfaceDefinition parseInterfaceDefinition : parseInterfaces.values()) {

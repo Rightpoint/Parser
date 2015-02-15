@@ -15,6 +15,6 @@ public class CustomParseHandler implements ParseHandler<DifferentParseHandlerCla
 
     @Override
     public void parse(DifferentParseHandlerClass parseable, Object dataInstance, Parser parser) {
-        
+
     }
 }

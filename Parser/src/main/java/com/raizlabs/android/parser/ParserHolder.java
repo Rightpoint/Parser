@@ -1,5 +1,6 @@
 package com.raizlabs.android.parser;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -190,7 +191,7 @@ public class ParserHolder {
 
     /**
      * Internal method for adding a {@link com.raizlabs.android.parser.Parser} for the specified data type class such as
-     * {@link org.json.JSONObject}
+     * JSONObject.
      *
      * @param clazz  Used when we parse an object of certain type, it is used to retrieve the {@link com.raizlabs.android.parser.Parser} for it.
      * @param parser Describes how to parse the specified data type
@@ -199,7 +200,13 @@ public class ParserHolder {
         mParseMap.put(clazz, parser);
     }
 
+    /**
+     * @param clazz The data type to parse.
+     * @return True if there is a {@link com.raizlabs.android.parser.Parser} for the specified type.
+     */
     public static boolean hasParser(Class<?> clazz) {
         return mParseMap.containsKey(clazz);
     }
+
+
 }

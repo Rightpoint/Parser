@@ -1,7 +1,9 @@
 package com.raizlabs.android.parser.processor.definition;
 
+import com.raizlabs.android.parser.ParseHandler;
 import com.raizlabs.android.parser.core.Key;
 import com.raizlabs.android.parser.core.Mergeable;
+import com.raizlabs.android.parser.core.Parseable;
 import com.raizlabs.android.parser.processor.ParserManager;
 import com.raizlabs.android.parser.processor.ProcessorUtils;
 import com.raizlabs.android.parser.processor.validation.KeyValidator;
@@ -28,6 +30,8 @@ public class ParseableDefinition extends BaseDefinition {
 
     public boolean isMergeable = false;
 
+    public String parseHandlerClazz;
+
     public ArrayList<KeyDefinition> keyDefinitions = new ArrayList<>();
 
     public ParseableDefinition(TypeElement typeElement, ParserManager manager) {
@@ -35,6 +39,13 @@ public class ParseableDefinition extends BaseDefinition {
         setDefinitionClassName(PARSEABLE_CLASS_SUFFIX);
 
         isMergeable = typeElement.getAnnotation(Mergeable.class) != null;
+
+        Parseable parseable = typeElement.getAnnotation(Parseable.class);
+
+        String clazz = ProcessorUtils.getClassFromAnnotation(parseable);
+        if(!ParseHandler.class.getCanonicalName().equals(clazz)) {
+            parseHandlerClazz = clazz;
+        }
 
         List<? extends Element> elements = typeElement.getEnclosedElements();
         KeyValidator keyValidator = new KeyValidator(manager);
@@ -50,6 +61,14 @@ public class ParseableDefinition extends BaseDefinition {
         isFieldParser = ProcessorUtils.implementsClass(manager, Classes.FIELD_PARSIBLE, typeElement);
         manager.addParseableDefinition(typeElement, this);
 
+    }
+
+    @Override
+    public String getSourceFileName() {
+        if(parseHandlerClazz != null) {
+            return parseHandlerClazz;
+        }
+        return super.getSourceFileName();
     }
 
     @Override
@@ -84,7 +103,7 @@ public class ParseableDefinition extends BaseDefinition {
     @Override
     protected String[] getImplementsClasses() {
         String[] implement = new String[1];
-        implement[0] = Classes.OBJECT_PARSER + "<" + elementClassName + ">";
+        implement[0] = Classes.PARSE_HANDLER + "<" + elementClassName + ">";
         return implement;
     }
 }

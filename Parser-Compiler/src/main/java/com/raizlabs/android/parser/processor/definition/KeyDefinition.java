@@ -141,31 +141,38 @@ public class KeyDefinition implements Writer {
             type = Type.NORMAL;
             isPrimitive = true;
 
-            if(isMergeable || isParentMergeable) {
-                defaultValue = String.format("parseable.%1s", variableName);
-            } else if(defaultValue == null || defaultValue.isEmpty()) {
-                TypeKind typeKind = typeMirror.getKind();
-                if(typeKind.equals(TypeKind.LONG)) {
-                    defaultValue = "0l";
-                } else if(typeKind.equals(TypeKind.DOUBLE)) {
-                    defaultValue = "0d";
-                } else if(typeKind.equals(TypeKind.FLOAT)) {
-                    defaultValue = "0f";
-                } else if(typeKind.equals(TypeKind.BOOLEAN)) {
-                    defaultValue = "false";
-                } else if(typeKind.equals(TypeKind.SHORT)
-                        || typeKind.equals(TypeKind.BYTE)
-                        || typeKind.equals(TypeKind.INT)) {
-                    defaultValue = "0";
-                } else if(typeKind.equals(TypeKind.CHAR)) {
-                    defaultValue = "\'\'";
+            boolean emptyDefaultValue = defaultValue == null || defaultValue.isEmpty();
+
+            if(emptyDefaultValue) {
+                if (isMergeable || isParentMergeable) {
+                    defaultValue = String.format("parseable.%1s", variableName);
+                } else {
+                    TypeKind typeKind = typeMirror.getKind();
+                    if (typeKind.equals(TypeKind.LONG)) {
+                        defaultValue = "0l";
+                    } else if (typeKind.equals(TypeKind.DOUBLE)) {
+                        defaultValue = "0d";
+                    } else if (typeKind.equals(TypeKind.FLOAT)) {
+                        defaultValue = "0f";
+                    } else if (typeKind.equals(TypeKind.BOOLEAN)) {
+                        defaultValue = "false";
+                    } else if (typeKind.equals(TypeKind.SHORT)
+                            || typeKind.equals(TypeKind.BYTE)
+                            || typeKind.equals(TypeKind.INT)) {
+                        defaultValue = "0";
+                    } else if (typeKind.equals(TypeKind.CHAR)) {
+                        defaultValue = "\'\'";
+                    }
                 }
             }
         } else {
-            if(isMergeable || isParentMergeable) {
-                defaultValue = String.format("parseable.%1s", variableName);
-            } else if(defaultValue == null || defaultValue.isEmpty()) {
-                defaultValue = "null";
+            boolean emptyDefaultValue = defaultValue == null || defaultValue.isEmpty();
+            if(emptyDefaultValue) {
+                if (isMergeable || isParentMergeable) {
+                    defaultValue = String.format("parseable.%1s", variableName);
+                } else {
+                    defaultValue = "null";
+                }
             }
 
             if (typeMirror instanceof ArrayType) {

@@ -15,7 +15,7 @@ public class MergeableClass {
     @Key
     String name;
 
-    @Key
+    @Key(defValue = "false")
     boolean isSet;
 
     @NotMergeable

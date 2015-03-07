@@ -1,6 +1,10 @@
 package com.raizlabs.android.parser.processor.definition;
 
+import com.google.common.collect.Sets;
+import com.raizlabs.android.parser.ParseHandler;
 import com.raizlabs.android.parser.core.Key;
+import com.raizlabs.android.parser.core.Mergeable;
+import com.raizlabs.android.parser.core.Parseable;
 import com.raizlabs.android.parser.processor.ParserManager;
 import com.raizlabs.android.parser.processor.ProcessorUtils;
 import com.raizlabs.android.parser.processor.validation.KeyValidator;
@@ -11,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.lang.model.element.Element;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 
@@ -25,17 +30,33 @@ public class ParseableDefinition extends BaseDefinition {
 
     public boolean isFieldParser = false;
 
+    public boolean isMergeable = false;
+
+    public String parseHandlerClazz;
+
+    public boolean parseHandlerOverridesDefinition = false;
+
     public ArrayList<KeyDefinition> keyDefinitions = new ArrayList<>();
 
     public ParseableDefinition(TypeElement typeElement, ParserManager manager) {
         super(typeElement, manager);
         setDefinitionClassName(PARSEABLE_CLASS_SUFFIX);
 
+        isMergeable = typeElement.getAnnotation(Mergeable.class) != null;
+
+        Parseable parseable = typeElement.getAnnotation(Parseable.class);
+
+        String clazz = ProcessorUtils.getClassFromAnnotation(parseable);
+        if(!ParseHandler.class.getCanonicalName().equals(clazz)) {
+            parseHandlerClazz = clazz;
+            parseHandlerOverridesDefinition = parseable.parseHandlerOverridesGenerated();
+        }
+
         List<? extends Element> elements = typeElement.getEnclosedElements();
         KeyValidator keyValidator = new KeyValidator(manager);
         for (Element enclosedElement : elements) {
             if (enclosedElement.getAnnotation(Key.class) != null) {
-                KeyDefinition keyDefinition = new KeyDefinition(manager, (VariableElement) enclosedElement);
+                KeyDefinition keyDefinition = new KeyDefinition(manager, (VariableElement) enclosedElement, isMergeable);
                 if (keyValidator.validate(manager, keyDefinition)) {
                     keyDefinitions.add(keyDefinition);
                 }
@@ -47,8 +68,21 @@ public class ParseableDefinition extends BaseDefinition {
 
     }
 
+    public String getParseHandlerClass() {
+        if(parseHandlerClazz != null && parseHandlerOverridesDefinition) {
+            return parseHandlerClazz;
+        } else {
+            return super.getSourceFileName();
+        }
+    }
+
     @Override
     public void onWriteDefinition(JavaWriter javaWriter) throws IOException {
+
+        if(parseHandlerClazz != null) {
+            javaWriter.emitEmptyLine();
+            javaWriter.emitField(parseHandlerClazz, "customParseHandler", Sets.newHashSet(Modifier.FINAL), "new " + parseHandlerClazz + "()");
+        }
 
         javaWriter.emitEmptyLine();
         javaWriter.emitAnnotation(Override.class);
@@ -73,13 +107,17 @@ public class ParseableDefinition extends BaseDefinition {
             javaWriter.emitStatement("((%1s)parseable).parse(%1s, %1s)", Classes.FIELD_PARSIBLE, "instance", "parse");
         }
 
+        if (parseHandlerClazz != null) {
+            javaWriter.emitStatement("customParseHandler.parse(%1s, %1s, %1s)", "parseable", "instance", "parse");
+        }
+
         javaWriter.endMethod();
     }
 
     @Override
     protected String[] getImplementsClasses() {
         String[] implement = new String[1];
-        implement[0] = Classes.OBJECT_PARSER + "<" + elementClassName + ">";
+        implement[0] = Classes.PARSE_HANDLER + "<" + elementClassName + ">";
         return implement;
     }
 }

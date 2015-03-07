@@ -6,9 +6,7 @@ import com.raizlabs.android.parser.core.Key;
 import com.raizlabs.android.parser.core.Parseable;
 
 /**
- * Author: andrewgrosner
- * Contributors: { }
- * Description:
+ * Description: Simple example
  */
 @Parseable
 public class SimpleClass implements ParseListener {

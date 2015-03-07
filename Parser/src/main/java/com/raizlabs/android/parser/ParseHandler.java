@@ -4,7 +4,7 @@ package com.raizlabs.android.parser;
  * Author: andrewgrosner
  * Description: Internal usage that will generate how to parse an object
  */
-public interface ObjectParser<ParseableClass> {
+public interface ParseHandler<ParseableClass> {
 
     /**
      * @return a new instance of the {@link ParseableClass} without using reflection.

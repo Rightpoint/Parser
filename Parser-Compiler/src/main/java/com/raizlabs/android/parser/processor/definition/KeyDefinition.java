@@ -2,6 +2,8 @@ package com.raizlabs.android.parser.processor.definition;
 
 import com.raizlabs.android.parser.core.FieldParseable;
 import com.raizlabs.android.parser.core.Key;
+import com.raizlabs.android.parser.core.Mergeable;
+import com.raizlabs.android.parser.core.NotMergeable;
 import com.raizlabs.android.parser.core.Parseable;
 import com.raizlabs.android.parser.processor.ParserManager;
 import com.raizlabs.android.parser.processor.ProcessorUtils;
@@ -106,7 +108,11 @@ public class KeyDefinition implements Writer {
 
     boolean required;
 
-    public KeyDefinition(ParserManager manager, VariableElement element) {
+    boolean isMergeable = false;
+
+    boolean notMergeable = false;
+
+    public KeyDefinition(ParserManager manager, VariableElement element, boolean isParentMergeable) {
         this.element = element;
 
         Key key = element.getAnnotation(Key.class);
@@ -114,6 +120,14 @@ public class KeyDefinition implements Writer {
         variableName = element.getSimpleName().toString();
         if (keyName == null || keyName.isEmpty()) {
             keyName = variableName;
+        }
+
+        isMergeable = element.getAnnotation(Mergeable.class) != null;
+        if(!isMergeable) {
+            notMergeable = element.getAnnotation(NotMergeable.class) != null;
+            if(notMergeable) {
+                isParentMergeable = false;
+            }
         }
 
         required = key.required();
@@ -127,28 +141,38 @@ public class KeyDefinition implements Writer {
             type = Type.NORMAL;
             isPrimitive = true;
 
-            if(defaultValue == null || defaultValue.isEmpty()) {
-                TypeKind typeKind = typeMirror.getKind();
-                if(typeKind.equals(TypeKind.LONG)) {
-                    defaultValue = "0l";
-                } else if(typeKind.equals(TypeKind.DOUBLE)) {
-                    defaultValue = "0d";
-                } else if(typeKind.equals(TypeKind.FLOAT)) {
-                    defaultValue = "0f";
-                } else if(typeKind.equals(TypeKind.BOOLEAN)) {
-                    defaultValue = "false";
-                } else if(typeKind.equals(TypeKind.SHORT)
-                        || typeKind.equals(TypeKind.BYTE)
-                        || typeKind.equals(TypeKind.INT)) {
-                    defaultValue = "0";
-                } else if(typeKind.equals(TypeKind.CHAR)) {
-                    defaultValue = "\'\'";
+            boolean emptyDefaultValue = defaultValue == null || defaultValue.isEmpty();
+
+            if(emptyDefaultValue) {
+                if (isMergeable || isParentMergeable) {
+                    defaultValue = String.format("parseable.%1s", variableName);
+                } else {
+                    TypeKind typeKind = typeMirror.getKind();
+                    if (typeKind.equals(TypeKind.LONG)) {
+                        defaultValue = "0l";
+                    } else if (typeKind.equals(TypeKind.DOUBLE)) {
+                        defaultValue = "0d";
+                    } else if (typeKind.equals(TypeKind.FLOAT)) {
+                        defaultValue = "0f";
+                    } else if (typeKind.equals(TypeKind.BOOLEAN)) {
+                        defaultValue = "false";
+                    } else if (typeKind.equals(TypeKind.SHORT)
+                            || typeKind.equals(TypeKind.BYTE)
+                            || typeKind.equals(TypeKind.INT)) {
+                        defaultValue = "0";
+                    } else if (typeKind.equals(TypeKind.CHAR)) {
+                        defaultValue = "\'\'";
+                    }
                 }
             }
         } else {
-
-            if(defaultValue == null || defaultValue.isEmpty()) {
-                defaultValue = "null";
+            boolean emptyDefaultValue = defaultValue == null || defaultValue.isEmpty();
+            if(emptyDefaultValue) {
+                if (isMergeable || isParentMergeable) {
+                    defaultValue = String.format("parseable.%1s", variableName);
+                } else {
+                    defaultValue = "null";
+                }
             }
 
             if (typeMirror instanceof ArrayType) {

@@ -1,6 +1,8 @@
 package com.raizlabs.android.parser.processor.validation;
 
 import com.google.common.collect.Lists;
+import com.raizlabs.android.parser.core.Mergeable;
+import com.raizlabs.android.parser.core.NotMergeable;
 import com.raizlabs.android.parser.processor.ParserManager;
 import com.raizlabs.android.parser.processor.definition.KeyDefinition;
 
@@ -43,6 +45,13 @@ public class KeyValidator implements Validator<KeyDefinition> {
             } else if(keyDefinition.type.equals(KeyDefinition.Type.MAP)) {
                 success = validateMapType(keyDefinition);
             }
+        }
+
+        if(keyDefinition.element.getAnnotation(Mergeable.class) != null
+                && keyDefinition.element.getAnnotation(NotMergeable.class) != null) {
+            manager.logError("Found a field with both Mergeable and NotMergeable. NotMergeable will override" +
+                    "Mergeable so remove Mergeable.");
+            success = false;
         }
 
         return success;

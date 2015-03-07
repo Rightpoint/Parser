@@ -7,8 +7,6 @@ package com.raizlabs.android.parser.processor.definition;
  */
 public class Classes {
 
-    public static final String OBJECT_PARSER = "com.raizlabs.android.parser.ObjectParser";
-
     public static final String PARSER_PACKAGE = "com.raizlabs.android.parser";
 
     public static final String PARSER_HOLDER = PARSER_PACKAGE + ".ParserHolder";
@@ -18,6 +16,8 @@ public class Classes {
     public static final String PARSER_MANAGER_INTERFACE = PARSER_PACKAGE + ".ParserManagerInterface";
 
     public static final String FIELD_PARSIBLE = PARSER_PACKAGE + ".FieldParseable";
+
+    public static final String PARSE_HANDLER = PARSER_PACKAGE + ".ParseHandler";
 }
 
 

@@ -38,16 +38,16 @@ public class ParserUtils {
 
     @SuppressWarnings("unchecked")
     public static Object parse(Parser parser, Class<?> returnType, Object data) {
-        ObjectParser objectParser = ParserHolder.getParseable(returnType);
-        Object instance = objectParser.getInstance();
-        objectParser.parse(instance, data, parser);
+        ParseHandler parseHandler = ParserHolder.getParseable(returnType);
+        Object instance = parseHandler.getInstance();
+        parseHandler.parse(instance, data, parser);
         return instance;
     }
 
     @SuppressWarnings("unchecked")
     public static void parse(Parser parser, Object instance, Object data) {
-        ObjectParser objectParser = ParserHolder.getParseable(instance.getClass());
-        objectParser.parse(instance, data, parser);
+        ParseHandler parseHandler = ParserHolder.getParseable(instance.getClass());
+        parseHandler.parse(instance, data, parser);
     }
 
     /**

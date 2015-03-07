@@ -50,6 +50,9 @@ For using ```FastJSON``` [here](https://github.com/alibaba/fastjson) add ```Pars
 
 ### 1.3.0
 
+1. Adds ability to define custom ```ParseHandler``` either by including it in the main parse, or by overriding the parse definition creation.
+2. added ```@Mergeable``` so we can merge two different sources of JSON. can configure on class or field level.
+
 ### 1.2.0
 
   1. Makes ```Parser``` a java library with ```Parser-Compiler```. No need to use for just Android anymore. Also, ```Parser-Core``` is now part of ```Parser``` since ```Parser``` became a java-library.

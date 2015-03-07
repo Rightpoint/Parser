@@ -16,6 +16,17 @@ public interface Parser<ObjectType, ListType> {
      * @param object   The singular object to retrieve data from
      * @param key      The key to look up a value for
      * @param defValue Used when the value is not in the parser's data source
+     * @return The value that we desire based on these parameters.
+     * It may be the default value if not found and not required.
+     */
+    public Object getValue(ObjectType object, String key, Object defValue);
+
+    /**
+     * Use this method to specify how to retrieve the key from the object.
+     *
+     * @param object   The singular object to retrieve data from
+     * @param key      The key to look up a value for
+     * @param defValue Used when the value is not in the parser's data source
      * @param required If true, the parser should throw an exception.
      * @return The value that we desire based on these parameters.
      * It may be the default value if not found and not required.

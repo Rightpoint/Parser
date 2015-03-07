@@ -147,7 +147,9 @@ have the class implement ```ParseListener```. Can define its own ```ParseHandler
 
 ```@Key``` tells the **Parser*** what key to reference for a specific field. The key is defaulted to the name of the field. A ```defValue``` can be specified as a string to use if the value is missing from a parse. Custom objects can be instantiated too with as default value, however you need to use the fully-qualified class name of any custom class you use. The default for all types are: "false" for boolean, "0" for numbers, or a "null" equivalent for any non-primitive. If ```required()``` is true, will throw a ```ParseException``` when a key is not found. 
 
-```@Mergeable```: Enables parsing multiple sources of data into a single ```@Parseable``` or field. Consequent parses to the same object will not override preset data (if that value is missing from the JSON).
+```@Mergeable```: Enables parsing multiple sources of data into a single ```@Parseable``` or ```@Key``` field. Consequent parses to the same object will not override preset data (if that value is missing from the JSON).
+
+```@NotMergeable```: Disables mergeability for a specific key when the parent is ```@Mergeable```. 
 
 ### Supported Types
 

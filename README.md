@@ -14,7 +14,7 @@ The library enables you to swap and easily move between different JSON libraries
     repositories {
         maven { url "https://raw.github.com/Raizlabs/maven-releases/master/releases" }
     }
-    classpath 'com.raizlabs:Griddle:1.0.2'
+    classpath 'com.raizlabs:Griddle:1.0.3'
     classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
   }
   
@@ -37,7 +37,7 @@ Add the library to the project-level build.gradle, using the [apt plugin](https:
 
   dependencies {
     apt 'com.raizlabs.android:Parser-Compiler:1.3.0'
-    mod "com.raizlabs.android:Parser-Core:1.3.0"
+    mod "com.raizlabs.android:{Parser-Core}:1.3.0"
   }
 
 ```

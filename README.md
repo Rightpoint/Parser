@@ -1,3 +1,7 @@
+## Important Notice
+
+This repository is slated for deletion, perhaps as soon as June 1, 2016.  Please find other solutions.  
+
 [![Android Weekly](http://img.shields.io/badge/Android%20Weekly-%23133-2CB3E5.svg?style=flat)](http://androidweekly.net/issues/issue-133)
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Parser-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1255) [![Raizlabs Repository](http://img.shields.io/badge/Raizlabs%20Repository-1.3.0-blue.svg?style=flat)](https://github.com/Raizlabs/maven-releases)
 
